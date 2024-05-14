@@ -33,7 +33,7 @@ export const reportings = sqliteTable('reportings', {
   jour: text('jour'),
   annee: text('annee'),
   compteNbre: integer('compte_nbre'),
-  recompense: text('recompense'),
+  recompense: integer('recompense'),
   totalAgent: integer('total_agent'),
   agencesId: integer('agences_id').references(() => agences.id),
   status: integer("status").default(1),

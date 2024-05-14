@@ -16,13 +16,26 @@ export default defineEventHandler(async (event) => {
   if(itemVerif){
     throw createError({
       statusCode: 400,
-      statusMessage: "Ce rapport horaire existe déja!",
+      statusMessage: "Ce suivi d'horaire existe déja!",
     });
   }
 
-  const userCount = await userService.getUserCount();
+  const itemVerifMois = await reportingsService.getReportingsByMois(format(new Date(), 'MM', { locale: fr }), format(new Date(), 'yyyy'));
+
+  if(itemVerifMois){
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Ce suivi d'horaire pour ce mois-ci existe déja!",
+    });
+  }
+
+  const userCount = await userService.getUserCount(body.agencesId);
+
+  //console.log(body.agencesId)
 
   const userid = await userService.getAllUsersId(body.agencesId);
+
+  //console.log(userid)
 
   if(userid.length == 0){
     throw createError({

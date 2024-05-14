@@ -11,6 +11,13 @@
           <img style="height: 50px" src="/logocean.png" alt="Flowbite Logo" />
         </NuxtLink>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+          <NuxtLink
+            to="/pointage"
+            target="_Blanc"
+            class="mr-4 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+          >
+            Espace de pointage
+          </NuxtLink>
           <button
             type="button"
             @click="onDeconnexion"
@@ -30,7 +37,7 @@
     <div
       class="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600"
     >
-      <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+      <div class="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
         <button
         @click="onAccueil"
           type="button"
@@ -50,6 +57,20 @@
           <span
             class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
             >Accueil</span
+          >
+        </button>
+        <button
+        @click="onSuiviHoraire"
+          type="button"
+          class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+        >
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+  <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+</svg>
+
+          <span
+            class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+            >Suivi Horaire</span
           >
         </button>
         <button
@@ -134,6 +155,10 @@ const onReporting = async () =>{
 
 const onParametres = async () =>{
   router.replace("/admin/parametres");
+}
+
+const onSuiviHoraire = async () =>{
+  router.replace("/admin/suivi-horaire");
 }
 
 const onProfile = async () =>{

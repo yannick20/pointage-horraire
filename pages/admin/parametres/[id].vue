@@ -11,7 +11,10 @@
         >
           <li class="flex">
             <div class="flex items-center">
-              <a href="#" class="text-gray-400 hover:text-gray-500">
+              <NuxtLink
+                to="/admin/parametres"
+                class="text-gray-400 hover:text-gray-500"
+              >
                 <svg
                   class="h-5 w-5 flex-shrink-0"
                   viewBox="0 0 20 20"
@@ -24,8 +27,8 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span class="sr-only">Home</span>
-              </a>
+                <span class="sr-only">Accueil</span>
+              </NuxtLink>
             </div>
           </li>
           <li class="flex">
@@ -39,10 +42,10 @@
               >
                 <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
               </svg>
-              <a
-                href="#"
+              <NuxtLink
+                to="/admin/parametres"
                 class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
-                >Parametres</a
+                >Parametres > {{ $route.params.id }}</NuxtLink
               >
             </div>
           </li>
@@ -93,8 +96,8 @@
                 class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0"
               >
                 <button
-                  @click="onOpenModal"
                   type="button"
+                  @click="onOpenModal"
                   class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                 >
                   <svg
@@ -110,7 +113,7 @@
                       d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                     />
                   </svg>
-                  Nouvelle Agence
+                  Ajouter un agent
                 </button>
               </div>
             </div>
@@ -122,50 +125,47 @@
                   class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
                 >
                   <tr>
-                    <th scope="col" class="px-4 py-3">Nom de l'agence</th>
-                    <th scope="col" class="px-4 py-3">Ville</th>
+                    <th scope="col" class="px-4 py-3">Nom & Prenom</th>
+                    <th scope="col" class="px-4 py-3">Fonction</th>
+                    <th scope="col" class="px-4 py-3">Telephone</th>
                     <th scope="col" class="px-4 py-3">Quartier</th>
-                    <th scope="col" class="px-4 py-3">Heure de debut</th>
-                    <th scope="col" class="px-4 py-3">Heure de fin</th>
+                    <th scope="col" class="px-4 py-3">Role</th>
+                    <!-- <th scope="col" class="px-4 py-3">Status</th> -->
                     <th scope="col" class="px-4 py-3">
                       <span class="sr-only">Actions</span>
                     </th>
                   </tr>
                 </thead>
                 <tfoot>
-                  <tr
-                    v-if="tbAgences.length === 0 && isloadingAgences == false"
-                  >
+                  <tr v-if="tbAgents.length === 0 && isloadingAgents == false">
                     <td colspan="6" class="py-4 text-center">
                       Aucune donnée n'a été trouvé
                     </td>
                   </tr>
-                  <tr v-if="isloadingAgences">
+                  <tr v-if="isloadingAgents">
                     <td colspan="6" class="py-4 text-center">
                       Chargement des données...
                     </td>
                   </tr>
                 </tfoot>
-                <tbody v-for="(item, index) in tbAgences" :key="index">
-                  <tr class="border-b dark:border-gray-700">
+                <tbody>
+                  <tr
+                    class="border-b dark:border-gray-700"
+                    v-for="(item, index) in tbAgents"
+                    :key="index"
+                  >
                     <th
                       scope="row"
                       class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {{ item.libelle }}
+                      {{ item.nom }} {{ item.prenom }}
                     </th>
-                    <td class="px-4 py-3">{{ item.ville }}</td>
+                    <td class="px-4 py-3">{{ item.phone }}</td>
+                    <td class="px-4 py-3">{{ item.fonction }}</td>
                     <td class="px-4 py-3">{{ item.quartier }}</td>
-                    <td class="px-4 py-3">{{ item.heuredebutTravail }}</td>
-                    <td class="px-4 py-3">{{ item.heuredefinTravail }}</td>
-                    <td class="flex items-center justify-center">
-                      <button
-                        @click="getOneAgence(item)"
-                        type="button"
-                        class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-                      >
-                        Ajouter des agents
-                      </button>
+                    <td class="px-4 py-3">{{ item.role }}</td>
+                    <!-- <td class="px-4 py-3">{{ item.status }}</td> -->
+                    <td class="px-4 py-3 flex items-center justify-center">
                       <button
                         type="button"
                         @click="onOpenUpdateModal(item)"
@@ -226,9 +226,9 @@
               <span
                 class="text-sm font-normal text-gray-500 dark:text-gray-400"
               >
-                Totals des agences:
+                Totals des agents:
                 <span class="font-semibold text-gray-900 dark:text-white">{{
-                  tbAgences.length
+                  tbAgents.length
                 }}</span>
               </span>
             </nav>
@@ -276,32 +276,50 @@
                 <hr class="my-4" />
                 <div class="mt-4">
                   <form @submit.prevent="onSubmit">
-                    <div>
-                      <label
-                        for="first_name"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >Nom de l'agence</label
-                      >
-                      <input
-                        type="text"
-                        id="first_name"
-                        v-model="libelle" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="ex : Agence 1"
-                        required
-                      />
+                   
+                    <div class="mt-4 grid gap-6 md:grid-cols-2">
+                      <div>
+                        <label
+                          for="nom"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Nom</label
+                        >
+                        <input
+                          type="text"
+                          id="nom"
+                          v-model="nom" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : we 1"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label
+                          for="prenom"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Prenom</label
+                        >
+                        <input
+                          type="text"
+                          id="prenom"
+                          v-model="prenom" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : dd 1"
+                          required
+                        />
+                      </div>
                     </div>
                     <div class="mt-4 grid gap-6 md:grid-cols-2">
                       <div>
                         <label
-                          for="ville"
+                          for="phone"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Ville</label
+                          >Telephone</label
                         >
                         <input
                           type="text"
-                          id="ville"
-                          v-model="ville" 
+                          v-model="phone" 
+                          id="phone"
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="ex : Agence 1"
                           required
@@ -309,52 +327,64 @@
                       </div>
                       <div>
                         <label
+                          for="fonction"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Fonction</label
+                        >
+                        <input
+                          type="text"
+                          id="fonction"
+                          v-model="fonction" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : Agence 1"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="mt-4 grid gap-6 md:grid-cols-2">
+                      <div>
+                        <label
+                          for="role"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Role</label
+                        >
+                        <select v-model="role"  id="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          <option selected value="">Selectionner un role</option>
+                          <option value="Administrateur">Administrateur</option>
+                          <option value="Utilisateur">Utilisateur</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label
                           for="quartier"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Quartier</label
+                          >quartier</label
                         >
                         <input
                           type="text"
                           id="quartier"
                           v-model="quartier" 
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
+                          placeholder="ex : tiet tie"
                           required
                         />
                       </div>
                     </div>
-                    <div class="mt-4 grid gap-6 md:grid-cols-2">
-                      <div>
+                    <div class="mt-4">
                         <label
-                          for="heuredebutTravail"
+                          for="password"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure debut Travail</label
+                          >password</label
                         >
                         <input
-                          type="time"
-                          v-model="heuredebutTravail" 
-                          id="heuredebutTravail"
+                          type="password"
+                          id="password"
+                          v-model="password" 
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="ex : Agence 1"
                           required
                         />
                       </div>
-                      <div>
-                        <label
-                          for="heuredefinTravail"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure de fin Travail</label
-                        >
-                        <input
-                          type="time"
-                          id="heuredefinTravail"
-                          v-model="heuredefinTravail" 
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                    </div>
                     <div class="mt-5 text-center">
                       <button
                         :disabled="isloadingAdd"
@@ -415,37 +445,54 @@
                   as="h3"
                   class="text-lg font-medium leading-6 text-gray-900"
                 >
-                  Modification de l'agence : {{ libelleUpdated }}
+                  Modification de l'agence : {{ nomUpdated }}
                 </DialogTitle>
                 <hr class="my-4" />
                 <div class="mt-4">
                   <form @submit.prevent="onSubmitUpdated">
-                    <div>
-                      <label
-                        for="libelleUpdated"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >Nom de l'agence</label
-                      >
-                      <input
-                        type="text"
-                        id="libelleUpdated"
-                        v-model="libelleUpdated" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="ex : Agence 1"
-                        required
-                      />
+                    <div class="mt-4 grid gap-6 md:grid-cols-2">
+                      <div>
+                        <label
+                          for="nom"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Nom</label
+                        >
+                        <input
+                          type="text"
+                          id="nom"
+                          v-model="nomUpdated" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : we 1"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label
+                          for="prenom"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Prenom</label
+                        >
+                        <input
+                          type="text"
+                          id="prenom"
+                          v-model="prenomUpdated" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : dd 1"
+                          required
+                        />
+                      </div>
                     </div>
                     <div class="mt-4 grid gap-6 md:grid-cols-2">
                       <div>
                         <label
-                          for="villeUpdated"
+                          for="phone"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Ville</label
+                          >Telephone</label
                         >
                         <input
                           type="text"
-                          id="villeUpdated"
-                          v-model="villeUpdated" 
+                          v-model="phoneUpdated" 
+                          id="phone"
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="ex : Agence 1"
                           required
@@ -453,48 +500,45 @@
                       </div>
                       <div>
                         <label
-                          for="quartierUpdated"
+                          for="fonction"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Quartier</label
+                          >Fonction</label
                         >
                         <input
                           type="text"
-                          id="quartierUpdated"
+                          id="fonction"
+                          v-model="fonctionUpdated" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : Agence 1"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="mt-4 grid gap-6 md:grid-cols-2">
+                      <div>
+                        <label
+                          for="role"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Role</label
+                        >
+                        <select v-model="roleUpdated"  id="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          <option selected value="">Selectionner un role</option>
+                          <option value="Administrateur">Administrateur</option>
+                          <option value="Utilisateur">Utilisateur</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label
+                          for="quartier"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >quartier</label
+                        >
+                        <input
+                          type="text"
+                          id="quartier"
                           v-model="quartierUpdated" 
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div class="mt-4 grid gap-6 md:grid-cols-2">
-                      <div>
-                        <label
-                          for="heuredebutTravailUpdated"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure debut Travail</label
-                        >
-                        <input
-                          type="time"
-                          v-model="heuredebutTravailUpdated" 
-                          id="heuredebutTravailUpdated"
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label
-                          for="heuredefinTravailUpdated"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure de fin Travail</label
-                        >
-                        <input
-                          type="time"
-                          id="heuredefinTravailUpdated"
-                          v-model="heuredefinTravailUpdated" 
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
+                          placeholder="ex : tiet tie"
                           required
                         />
                       </div>
@@ -565,7 +609,7 @@
                   <p class="text-sm text-gray-500">
                     Voulez-vous vraiment supprimer cet agence ?
                   </p>
-                  <b>{{ libelleAgence }}</b>
+                  <b>{{ nomDelete }}</b>
                 </div>
 
                 <div class="mt-4 text-center">
@@ -583,7 +627,7 @@
                     class="ml-2 inline-flex justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     @click="onSubmitDelete"
                   >
-                    {{ btnLibelle }}
+                    {{ btnDelete }}
                   </button>
                 </div>
               </DialogPanel>
@@ -599,10 +643,6 @@
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 
-const { $toast, $axios } = useNuxtApp();
-// const nuxtApp = useNuxtApp()
-const router = useRouter();
-
 import {
   TransitionRoot,
   TransitionChild,
@@ -611,31 +651,38 @@ import {
   DialogTitle,
 } from "@headlessui/vue";
 
+const { $toast, $axios } = useNuxtApp();
+// const nuxtApp = useNuxtApp()
+const router = useRouter();
+
+const tbAgents = ref([]);
+const isloadingAgents = ref(false);
+
 const isOpen = ref(false);
 const isOpenDelete = ref(false);
 const isOpenUpdate = ref(false);
 
-const libelleAgence = ref("");
-const idAgence = ref("");
-const btnLibelle = ref("Oui");
-
-const libelle = ref("");
-const ville = ref("");
+const nom = ref("");
+const prenom = ref("");
+const phone = ref("");
+const fonction = ref("");
 const quartier = ref("");
-const heuredebutTravail = ref("");
-const heuredefinTravail = ref("");
+const role = ref("");
+const password = ref("");
 const btnAjouter = ref("Enregistrer");
 
-const idAgenceUpdate = ref("");
-const libelleUpdated = ref("");
-const villeUpdated = ref("");
+const nomUpdated = ref("");
+const prenomUpdated = ref("");
+const phoneUpdated = ref("");
+const fonctionUpdated = ref("");
 const quartierUpdated = ref("");
-const heuredebutTravailUpdated = ref("");
-const heuredefinTravailUpdated = ref("");
+const roleUpdated = ref("");
+const idUpdated = ref("");
 const btnUpdated = ref("Modifier");
 
-const tbAgences = ref([]);
-const isloadingAgences = ref(false);
+const nomDelete = ref("");
+const idUser = ref("");
+const btnDelete = ref("Oui");
 
 const isloadingDelete = ref(false);
 const isloadingAdd = ref(false);
@@ -650,8 +697,8 @@ const onCloseModal = async () => {
 };
 
 const onOpenDeleteModal = async (item) => {
-  libelleAgence.value = item.libelle;
-  idAgence.value = item.id;
+  nomDelete.value = item.nom + "" + item.prenom;
+  idUser.value = item.id;
   isOpenDelete.value = true;
 };
 
@@ -660,12 +707,13 @@ const onCloseDeleteModal = async () => {
 };
 
 const onOpenUpdateModal = async (item) => {
-  libelleUpdated.value = item.libelle;
-  villeUpdated.value = item.ville;
+  nomUpdated.value = item.nom;
+  prenomUpdated.value = item.prenom;
+  phoneUpdated.value = item.phone;
+  fonctionUpdated.value = item.fonction;
   quartierUpdated.value = item.quartier;
-  heuredebutTravailUpdated.value = item.heuredebutTravail;
-  heuredefinTravailUpdated.value = item.heuredefinTravail;
-  idAgenceUpdate.value = item.id;
+  roleUpdated.value = item.role;
+  idUpdated.value = item.id;
   isOpenUpdate.value = true;
 };
 
@@ -676,13 +724,17 @@ const onCloseUpdateModal = async () => {
 const onSubmit = async () => {
   isloadingAdd.value = true;
   btnAjouter.value = "enregistrement en cours...";
+  const agencesid = localStorage.getItem("idAgence");
   await $axios
-    .post("/api/agences", {
-      libelle: libelle.value,
-      ville: ville.value,
+    .post("/api/users", {
+      nom: nom.value,
+      prenom: prenom.value,
+      phone: phone.value,
+      fonction: fonction.value,
       quartier: quartier.value,
-      heuredebutTravail: heuredebutTravail.value,
-      heuredefinTravail: heuredefinTravail.value,
+      role: role.value,
+      password: password.value,
+      agencesId: agencesid,
     })
     .finally(() => {
       isloadingAdd.value = false;
@@ -691,13 +743,15 @@ const onSubmit = async () => {
       btnAjouter.value = "Enregistrer";
       onCloseModal();
       $toast.success(data.message);
-      onGetAgences();
+      onGetAgents();
 
-      libelle.value = "";
-      ville.value = "";
+      nom.value = "";
+      prenom.value = "";
+      phone.value = "";
+      fonction.value = "";
       quartier.value = "";
-      heuredebutTravail.value = "";
-      heuredefinTravail.value = "";
+      role.value = "";
+      password.value = "";
     })
     .catch((error) => {
       btnAjouter.value = "Enregistrer";
@@ -709,12 +763,13 @@ const onSubmitUpdated = async () => {
   isloadingUpdated.value = true;
   btnUpdated.value = "modification en cours...";
   await $axios
-    .put("/api/agences/"+ idAgenceUpdate.value, {
-      libelle: libelleUpdated.value,
-      ville: villeUpdated.value,
+    .put("/api/users/" + idUpdated.value, {
+      nom: nomUpdated.value,
+      prenom: prenomUpdated.value,
+      phone: phoneUpdated.value,
+      fonction: fonctionUpdated.value,
       quartier: quartierUpdated.value,
-      heuredebutTravail: heuredebutTravailUpdated.value,
-      heuredefinTravail: heuredefinTravailUpdated.value,
+      role: roleUpdated.value,
     })
     .finally(() => {
       isloadingUpdated.value = false;
@@ -723,7 +778,7 @@ const onSubmitUpdated = async () => {
       btnUpdated.value = "Modifier";
       onCloseUpdateModal();
       $toast.success(data.message);
-      onGetAgences();
+      onGetAgents();
 
       libelleUpdated.value = "";
       villeUpdated.value = "";
@@ -739,46 +794,46 @@ const onSubmitUpdated = async () => {
 
 const onSubmitDelete = async () => {
   isloadingDelete.value = true;
-  btnLibelle.value = "Suppression en cours...";
+  btnDelete.value = "Suppression en cours...";
   await $axios
-    .delete("/api/agences/" + idAgence.value)
+    .delete("/api/users/" + idUser.value)
     .finally(() => {
       isloadingDelete.value = false;
     })
     .then(({ data }) => {
-      btnLibelle.value = "Oui";
+      btnDelete.value = "Oui";
       onCloseDeleteModal();
       $toast.success(data.message);
-      onGetAgences();
+      onGetAgents();
     })
     .catch((error) => {
       $toast.error(error.response.data.message);
     });
 };
 
-const onGetAgences = async () => {
-  isloadingAgences.value = true;
+const onGetAgents = async () => {
+  isloadingAgents.value = true;
+  const agencesid = localStorage.getItem("idAgence");
   await $axios
-    .get("/api/agences")
+    .get("/api/users/getusersbyagences", {
+      headers: {
+        "key-id": agencesid,
+      },
+    })
     .finally(() => {
-      isloadingAgences.value = false;
+      isloadingAgents.value = false;
     })
     .then(({ data }) => {
-      tbAgences.value = data;
+      tbAgents.value = data;
     })
     .catch((error) => {
       $toast.error(error.response.data.message);
     });
-};
-
-const getOneAgence = async (item) => {
-  localStorage.setItem('idAgence', item.id)
-  router.push(`/admin/parametres/${item.libelle}`);
 };
 
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
-  onGetAgences();
+  onGetAgents();
 });
 </script>

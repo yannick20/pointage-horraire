@@ -66,9 +66,8 @@
               <div
                 class="flex items-baseline text-2xl font-semibold text-indigo-600"
               >
-                7
+                {{totalUsers}}
               </div>
-
             </dd>
           </div>
           <div class="px-4 py-5 sm:p-6">
@@ -79,7 +78,7 @@
               <div
                 class="flex items-baseline text-2xl font-semibold text-indigo-600"
               >
-                Bailyanne bouity Yannick
+                {{agentMaxPointOnlyn.nomComplet}}
                 <!-- <span class="ml-2 text-sm font-medium text-gray-500"
                   >Nbre de point</span
                 > -->
@@ -101,20 +100,21 @@
                   />
                 </svg>
                 <span class="sr-only"> Increased by </span>
-                29
+                {{agentMaxPointOnlyn.totalPointsSuccess}}
               </div>
             </dd>
           </div>
           <div class="px-4 py-5 sm:p-6">
-            <dt class="text-base font-normal text-gray-900">Agent retardataire</dt>
+            <dt class="text-base font-normal text-gray-900">
+              Agent retardataire
+            </dt>
             <dd
               class="mt-1 flex items-baseline justify-between md:block lg:flex"
             >
               <div
                 class="flex items-baseline text-2xl font-semibold text-red-600"
               >
-                Komba Jeannelyne
-                
+              {{agentMoinPointOnlyn.nomComplet}}
               </div>
 
               <div
@@ -133,7 +133,7 @@
                   />
                 </svg>
                 <span class="sr-only"> Decreased by </span>
-                74
+                {{agentMoinPointOnlyn.totalPointsDanger}}
               </div>
             </dd>
           </div>
@@ -144,7 +144,7 @@
           Historiques de pointage actuels
         </h3>
         <section class="mt-2">
-          <div class="mx-auto max-w-screen-xl">
+          <div class="mx-auto">
             <!-- Start coding here -->
             <div
               class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden"
@@ -159,63 +159,82 @@
                     <tr>
                       <th scope="col" class="px-4 py-3">Nom & Prenom</th>
                       <th scope="col" class="px-4 py-3">Agence</th>
+                      <th scope="col" class="px-4 py-3">Fonction</th>
                       <th scope="col" class="px-4 py-3">Heure d'Arrive</th>
                       <th scope="col" class="px-4 py-3">Heure de Depart</th>
                       <th scope="col" class="px-4 py-3">Cumule Point</th>
                       <th scope="col" class="px-4 py-3">Date</th>
-                      
                     </tr>
                   </thead>
+                  <tfoot>
+                    <tr v-if="tbHistoriques.length === 0 && isloading == false">
+                      <td colspan="6" class="py-4 text-center">
+                        Aucune donnée n'a été trouvé
+                      </td>
+                    </tr>
+                    <tr v-if="isloading">
+                      <td colspan="6" class="py-4 text-center">
+                        Chargement des données...
+                      </td>
+                    </tr>
+                  </tfoot>
                   <tbody>
-                    <tr class="border-b dark:border-gray-700">
+                    <tr
+                      class="border-b dark:border-gray-700"
+                      v-for="(item, index) in tbHistoriques"
+                      :key="index"
+                    >
                       <th
                         scope="row"
                         class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
-                        Apple iMac 27&#34;
+                      {{ item.users.nom }} {{ item.users.prenom }}
                       </th>
-                      <td class="px-4 py-3">PC</td>
-                      <td class="px-4 py-3">Apple</td>
-                      <td class="px-4 py-3">300</td>
+                      <td class="px-4 py-3">
+                        {{ item.agences.libelle }}
+                      </td>
+                      <td class="px-4 py-3">{{ item.users.fonction }}</td>
+                      <td class="px-4 py-3">{{ item.pointages.heureArrive }}</td>
+                      <td class="px-4 py-3">{{ item.pointages.heureDepart }}</td>
                       <td class="px-4 py-3">
                         <div
-                class="inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0"
-              >
-                <svg
-                  class="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-green-500"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                <span class="sr-only"> Increased by </span>
-                29
-              </div>
-              <div
-                class="ml-2 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0"
-              >
-                <svg
-                  class="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-red-500"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                <span class="sr-only"> Decreased by </span>
-                74
-              </div>
+                          class="inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0"
+                        >
+                          <svg
+                            class="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-green-500"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          <span class="sr-only"> Increased by </span>
+                          {{ item.pointages.pointSuccess }}
+                        </div>
+                        <div
+                          class="ml-2 inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0"
+                        >
+                          <svg
+                            class="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-red-500"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          <span class="sr-only"> Decreased by </span>
+                          {{ item.pointages.pointDanger }}
+                        </div>
                       </td>
-                      <td class="px-4 py-3">$2999</td>
+                      <td class="px-4 py-3">{{ item.pointages.dateComplet }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -227,10 +246,10 @@
                 <span
                   class="text-sm font-normal text-gray-500 dark:text-gray-400"
                 >
-                  Totals des agents:
-                  <span class="font-semibold text-gray-900 dark:text-white"
-                    >12</span
-                  >
+                  Totals des Historiques:
+                  <span class="font-semibold text-gray-900 dark:text-white">{{
+                    tbHistoriques.length
+                  }}</span>
                 </span>
               </nav>
             </div>
@@ -244,9 +263,61 @@
 <script setup>
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
+const { $toast, $axios } = useNuxtApp();
+// const nuxtApp = useNuxtApp()
+const router = useRouter();
+
+const tbHistoriques = ref([]);
+const isloading = ref(false);
+
+const phone = ref("");
+const password = ref("");
+const btnName = ref("Se connecter");
+
+const totalUsers = ref(0);
+const agentMaxPointOnlyn = ref({});
+const agentMoinPointOnlyn = ref({});
+
+const isloader = ref(false);
+
+const onGetPointagesOnly = async () => {
+  isloading.value = true;
+    await $axios
+      .get("/api/pointages/pointageusersonly")
+      .finally(() => {
+        isloading.value = false;
+      })
+      .then(({ data }) => {
+        tbHistoriques.value = data;
+      })
+      .catch((error) => {
+        $toast.error(error.response.data.message);
+      });
+  };
+
+  const onGetStatistiqueOnly = async () => {
+  isloading.value = true;
+    await $axios
+      .get("/api/statistiques/rapportonly")
+      .finally(() => {
+        isloading.value = false;
+      })
+      .then(({ data }) => {
+        //tbHistoriques.value = data;
+        totalUsers.value = data.totalUsers
+        agentMaxPointOnlyn.value = data.agentMaxPointOnlyn
+        agentMoinPointOnlyn.value = data.agentMoinPointOnlyn
+      })
+      .catch((error) => {
+        //$toast.error(error.response.data.message);
+        console.log(error.response.data.message)
+      });
+  };
 
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
+  onGetPointagesOnly()
+  onGetStatistiqueOnly()
 });
 </script>

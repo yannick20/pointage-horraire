@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     if(itemVerif){
       throw createError({
         statusCode: 400,
-        statusMessage: "La liste de pointage existe déja!",
+        statusMessage: `La fiche de pointage de la date ${dateVerif} existe déja!`,
       });
     }
   
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
 
   for (let index = 0; index < userid.length; index++) {
     const element = userid[index];
-    console.log(`user ${element.id}`)
+    //console.log(`user ${element.id}`)
 
     const newPointages: InsertPointages = {
       dateComplet: format(new Date(), 'dd/MM/yyyy', { locale: fr }),
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
       heureArrive: "",
       heureDepart: "",
       userId: element.id,
-      reportingsId : body.id,
+      reportingsId : body.reportingsId,
       agencesId: body.agencesId
     }
 

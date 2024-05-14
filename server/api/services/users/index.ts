@@ -3,7 +3,18 @@ import { db } from "@/server/api/services/sqlite-service";
 import { eq, count, or } from "drizzle-orm";
 
 class UserService {
+
+  private nombreDeJoursDansMois(mois: number, année: number): number {
+    return new Date(année, mois, 0).getDate();
+}
+
   public async getAllUsers() {
+
+//     const mois = 4; // Février (numéroté de 0 à 11)
+// const année = 2024;
+// const jours = this.nombreDeJoursDansMois(mois, année);
+// console.log(`Le mois ${mois} de l'année ${année} a ${jours} jours.`);
+
     const usersAll = db.select({
       id: users.id,
       nom: users.nom,
@@ -30,8 +41,8 @@ class UserService {
     return user;
   }
 
-  public async getUserCount() {
-    const usercount = db.select().from(users).all();
+  public async getUserCount(id: number) {
+    const usercount = db.select().from(users).where(eq(users.agencesId, id)).all();
     //console.log(usercount.length)
     return usercount.length;
   }
@@ -44,6 +55,22 @@ class UserService {
   public async postUser(insertUser: InsertUser) {
     const user = db.insert(users).values(insertUser).returning().all();
     return user;
+  }
+
+  public async getAllUsersByIdAgence(id: number) {
+    //dayjs().format()
+    const itemAll = db.select({
+      id: users.id,
+      nom: users.nom,
+      prenom: users.prenom,
+      phone: users.phone,
+      fonction: users.fonction,
+      quartier: users.quartier,
+      role: users.role,
+      agencesId: users.agencesId,
+      status: users.status,
+    }).from(users).where(eq(users.agencesId, id)).all();
+    return itemAll;
   }
 
   public async updatedUser(editUser: InsertUser, userId: string) {

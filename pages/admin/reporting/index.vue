@@ -52,35 +52,35 @@
   <div class="mx-auto max-w-7xl">
     <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4">
       <div class="bg-gray-900 px-4 py-6 sm:px-6 lg:px-8">
-        <p class="text-sm font-medium leading-6 text-gray-400">Number of deploys</p>
+        <p class="text-sm font-medium leading-6 text-gray-400">Total Utilisateurs</p>
         <p class="mt-2 flex items-baseline gap-x-2">
-          <span class="text-4xl font-semibold tracking-tight text-white">405</span>
+          <span class="text-4xl font-semibold tracking-tight text-white">{{usercount}}</span>
         </p>
       </div>
       <div class="bg-gray-900 px-4 py-6 sm:px-6 lg:px-8">
-        <p class="text-sm font-medium leading-6 text-gray-400">Average deploy time</p>
+        <p class="text-sm font-medium leading-6 text-gray-400">Total Reporting</p>
         <p class="mt-2 flex items-baseline gap-x-2">
-          <span class="text-4xl font-semibold tracking-tight text-white">3.65</span>
-          <span class="text-sm text-gray-400">mins</span>
+          <span class="text-4xl font-semibold tracking-tight text-white">{{reportingsCount}}</span>
+          <!-- <span class="text-sm text-gray-400">mins</span> -->
         </p>
       </div>
       <div class="bg-gray-900 px-4 py-6 sm:px-6 lg:px-8">
-        <p class="text-sm font-medium leading-6 text-gray-400">Number of servers</p>
+        <p class="text-sm font-medium leading-6 text-gray-400">Total Agences</p>
         <p class="mt-2 flex items-baseline gap-x-2">
-          <span class="text-4xl font-semibold tracking-tight text-white">3</span>
+          <span class="text-4xl font-semibold tracking-tight text-white">{{agencesCount}}</span>
         </p>
       </div>
       <div class="bg-gray-900 px-4 py-6 sm:px-6 lg:px-8">
-        <p class="text-sm font-medium leading-6 text-gray-400">Success rate</p>
+        <p class="text-sm font-medium leading-6 text-gray-400">Total Fiche de pointage</p>
         <p class="mt-2 flex items-baseline gap-x-2">
-          <span class="text-4xl font-semibold tracking-tight text-white">98.5%</span>
+          <span class="text-4xl font-semibold tracking-tight text-white">{{pointagesCount}}</span>
         </p>
       </div>
     </div>
   </div>
 </div>
-      <div class="mt-5">
-        <h3 class="text-base font-semibold leading-6 text-gray-900">
+      <div class="mt-5 ">
+        <h3 class="text-base font-semibold leading-6 text-gray-900 mb-4">
             Rapport global du mois passe
         </h3>
         <dl
@@ -96,7 +96,7 @@
               <div
                 class="flex items-baseline text-2xl font-semibold text-black-600"
               >
-                71.897 FCFA
+                {{totalReportingsSum}} FCFA
                 <!-- <span class="ml-2 text-sm font-medium text-gray-500"
                   >from 70,946</span
                 > -->
@@ -130,7 +130,7 @@
               <div
                 class="flex items-baseline text-2xl font-semibold text-green-600"
               >
-                Akilla Jean Noelle
+              {{agentMaxPointOnlyn.nomComplet}}
                 <!-- <span class="ml-2 text-sm font-medium text-gray-500"
                   >from 56.14%</span
                 > -->
@@ -152,7 +152,7 @@
                   />
                 </svg>
                 <span class="sr-only"> Increased by </span>
-                96
+                {{agentMaxPointOnlyn.totalPointsSuccess}}
               </div>
             </dd>
           </div>
@@ -164,7 +164,7 @@
               <div
                 class="flex items-baseline text-2xl font-semibold text-red-600"
               >
-                Honkika Piere Nelly
+              {{agentMoinPointOnlyn.nomComplet}}
                 <!-- <span class="ml-2 text-sm font-medium text-gray-500"
                   >from 28.62%</span
                 > -->
@@ -186,126 +186,13 @@
                   />
                 </svg>
                 <span class="sr-only"> Decreased by </span>
-                4
+                {{agentMoinPointOnlyn.totalPointsDanger}}
               </div>
             </dd>
           </div>
         </dl>
       </div>
-      <section class="py-8">
-        <div class="mx-auto max-w-screen-xl">
-          <!-- Start coding here -->
-          <div
-            class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden"
-          >
-            <div
-              class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4"
-            >
-              <div class="w-full md:w-1/2">
-                <form class="flex items-center">
-                  <label for="simple-search" class="sr-only">Search</label>
-                  <div class="relative w-full">
-                    <div
-                      class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                        fill="currentColor"
-                        viewbox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </div>
-                    <input
-                      type="text"
-                      id="simple-search"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="Search"
-                      required=""
-                    />
-                  </div>
-                </form>
-              </div>
-              <div
-                class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0"
-              >
-                <button
-                  type="button"
-                  class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-                >
-                  <svg
-                    class="h-3.5 w-3.5 mr-2"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <path
-                      clip-rule="evenodd"
-                      fill-rule="evenodd"
-                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                    />
-                  </svg>
-                  Ajouter un indicateur horaire
-                </button>
-              </div>
-            </div>
-            <div class="overflow-x-auto">
-              <table
-                class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
-              >
-                <thead
-                  class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-                >
-                  <tr>
-                    <th scope="col" class="px-4 py-3">Date</th>
-                    <th scope="col" class="px-4 py-3">Agence</th>
-                    <th scope="col" class="px-4 py-3">Total Agents</th>
-                    <th scope="col" class="px-4 py-3">Récompense</th>
-                    <th scope="col" class="px-4 py-3">Status</th>
-                    <th scope="col" class="px-4 py-3">
-                      <span class="sr-only">Actions</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="border-b dark:border-gray-700">
-                    <th
-                      scope="row"
-                      class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      Apple iMac 27&#34;
-                    </th>
-                    <td class="px-4 py-3">PC</td>
-                    <td class="px-4 py-3">Apple</td>
-                    <td class="px-4 py-3">300</td>
-                    <td class="px-4 py-3">$2999</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <nav
-              class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
-              aria-label="Table navigation"
-            >
-              <span
-                class="text-sm font-normal text-gray-500 dark:text-gray-400"
-              >
-                Totals des agents:
-                <span class="font-semibold text-gray-900 dark:text-white"
-                  >12</span
-                >
-              </span>
-            </nav>
-          </div>
-        </div>
-      </section>
+
     </NuxtLayout>
   </div>
 </template>
@@ -314,8 +201,62 @@
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
 
+const { $toast, $axios } = useNuxtApp();
+
+const isloading = ref(false);
+
+const usercount = ref("");
+const reportingsCount = ref("");
+const agencesCount = ref("");
+const pointagesCount = ref("");
+
+const totalReportingsSum = ref(0);
+const agentMaxPointOnlyn = ref({});
+const agentMoinPointOnlyn = ref({});
+
+const onGetStatistiqueLast = async () => {
+  isloading.value = true;
+    await $axios
+      .get("/api/statistiques/rapportgloballast")
+      .finally(() => {
+        isloading.value = false;
+      })
+      .then(({ data }) => {
+        //tbHistoriques.value = data;
+        totalReportingsSum.value = data.totalReportingsSum
+        agentMaxPointOnlyn.value = data.agentMaxPointOnlyn
+        agentMoinPointOnlyn.value = data.agentMoinPointOnlyn
+      })
+      .catch((error) => {
+        //$toast.error(error.response.data.message);
+        console.log(error.response.data.message)
+      });
+  };
+
+const onGetStatistiqueOnly = async () => {
+  isloading.value = true;
+    await $axios
+      .get("/api/statistiques")
+      .finally(() => {
+        isloading.value = false;
+      })
+      .then(({ data }) => {
+        //tbHistoriques.value = data;
+        usercount.value = data.usercount
+        reportingsCount.value = data.reportingsCount
+        agencesCount.value = data.agencesCount
+        pointagesCount.value = data.pointagesCount
+      })
+      .catch((error) => {
+        //$toast.error(error.response.data.message);
+        console.log(error.response.data.message)
+      });
+  };
+
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
+  onGetStatistiqueOnly();
+  onGetStatistiqueLast()
 });
 </script>

@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.22",
     "@types/jsonwebtoken": "^9.0.6",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",

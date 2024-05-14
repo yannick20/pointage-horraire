@@ -42,14 +42,14 @@
               <a
                 href="#"
                 class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
-                >Parametres</a
+                >Suivi d'horaire</a
               >
             </div>
           </li>
         </ol>
       </nav>
 
-      <section class="bg-gray-50 dark:bg-gray-900">
+      <section class="py-8">
         <div class="mx-auto">
           <!-- Start coding here -->
           <div
@@ -84,7 +84,7 @@
                       id="simple-search"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Search"
-                      required=""
+                      required
                     />
                   </div>
                 </form> -->
@@ -93,7 +93,7 @@
                 class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0"
               >
                 <button
-                  @click="onOpenModal"
+                @click="onOpenModal"
                   type="button"
                   class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                 >
@@ -110,7 +110,7 @@
                       d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                     />
                   </svg>
-                  Nouvelle Agence
+                  Ajouter un indicateur horaire
                 </button>
               </div>
             </div>
@@ -122,52 +122,52 @@
                   class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
                 >
                   <tr>
-                    <th scope="col" class="px-4 py-3">Nom de l'agence</th>
-                    <th scope="col" class="px-4 py-3">Ville</th>
-                    <th scope="col" class="px-4 py-3">Quartier</th>
-                    <th scope="col" class="px-4 py-3">Heure de debut</th>
-                    <th scope="col" class="px-4 py-3">Heure de fin</th>
+                    <th scope="col" class="px-4 py-3">Date</th>
+                    <th scope="col" class="px-4 py-3">Agence</th>
+                    <th scope="col" class="px-4 py-3">Total Agents</th>
+                    <th scope="col" class="px-4 py-3">Récompense</th>
+                    <th scope="col" class="px-4 py-3">Total Gagnant</th>
+                    <th scope="col" class="px-4 py-3">Status</th>
                     <th scope="col" class="px-4 py-3">
                       <span class="sr-only">Actions</span>
                     </th>
                   </tr>
                 </thead>
                 <tfoot>
-                  <tr
-                    v-if="tbAgences.length === 0 && isloadingAgences == false"
-                  >
-                    <td colspan="6" class="py-4 text-center">
-                      Aucune donnée n'a été trouvé
-                    </td>
-                  </tr>
-                  <tr v-if="isloadingAgences">
-                    <td colspan="6" class="py-4 text-center">
-                      Chargement des données...
-                    </td>
-                  </tr>
-                </tfoot>
-                <tbody v-for="(item, index) in tbAgences" :key="index">
-                  <tr class="border-b dark:border-gray-700">
+                <tr v-if="tbSuivisHoraires.length === 0 && isloading == false">
+                  <td colspan="6" class="py-4 text-center">Aucune donnée n'a été trouvé</td>
+                </tr>
+                <tr v-if="isloading">
+                  <td colspan="6" class="py-4 text-center">
+                  Chargement des données...
+                  </td>
+              </tr>
+              </tfoot>
+                <tbody>
+                  <tr class="border-b dark:border-gray-700" v-for="(item, index) in tbSuivisHoraires" :key="index">
                     <th
                       scope="row"
                       class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {{ item.libelle }}
+                      {{item.reportings.dateComplet}}
                     </th>
-                    <td class="px-4 py-3">{{ item.ville }}</td>
-                    <td class="px-4 py-3">{{ item.quartier }}</td>
-                    <td class="px-4 py-3">{{ item.heuredebutTravail }}</td>
-                    <td class="px-4 py-3">{{ item.heuredefinTravail }}</td>
+                    <td class="px-4 py-3">{{item.agences.libelle}}</td>
+                    <td class="px-4 py-3">{{item.reportings.totalAgent}}</td>
+                    <td class="px-4 py-3">{{item.reportings.recompense}} FCFA</td>
+                    <td class="px-4 py-3">{{item.reportings.compteNbre}}</td>
+                    <td class="px-4 py-3">{{item.reportings.status == 1 ? 'En cours' : 'Termier'}} </td>
                     <td class="flex items-center justify-center">
                       <button
-                        @click="getOneAgence(item)"
+                        @click="getOneSuivis(item)"
+                        
                         type="button"
                         class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                       >
-                        Ajouter des agents
+                        Voir
                       </button>
                       <button
                         type="button"
+                        :disabled="item.reportings.status == 2"
                         @click="onOpenUpdateModal(item)"
                         class="ml-4 mr-4 flex items-center justify-center text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                       >
@@ -196,6 +196,7 @@
                       <button
                         @click="onOpenDeleteModal(item)"
                         type="button"
+                        :disabled="item.reportings.status == 2"
                         class="flex items-center justify-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                       >
                         <svg
@@ -226,10 +227,10 @@
               <span
                 class="text-sm font-normal text-gray-500 dark:text-gray-400"
               >
-                Totals des agences:
-                <span class="font-semibold text-gray-900 dark:text-white">{{
-                  tbAgences.length
-                }}</span>
+                Totals des agents:
+                <span class="font-semibold text-gray-900 dark:text-white"
+                  >{{tbSuivisHoraires.length}}</span
+                >
               </span>
             </nav>
           </div>
@@ -271,86 +272,50 @@
                   as="h3"
                   class="text-lg font-medium leading-6 text-gray-900"
                 >
-                  Ajouter une agence
+                  Ajouter un Suivi d'horaire
                 </DialogTitle>
                 <hr class="my-4" />
                 <div class="mt-4">
                   <form @submit.prevent="onSubmit">
                     <div>
                       <label
-                        for="first_name"
+                        for="recompense1"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >Nom de l'agence</label
+                        >Montant de recompense</label
                       >
                       <input
-                        type="text"
-                        id="first_name"
-                        v-model="libelle" 
+                        type="number"
+                        id="recompense1"
+                        v-model="recompense" 
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="ex : Agence 1"
+                        placeholder="ex : 100000"
                         required
                       />
                     </div>
                     <div class="mt-4 grid gap-6 md:grid-cols-2">
                       <div>
                         <label
-                          for="ville"
+                          for="agence"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Ville</label
+                          >Agence</label
+                        >
+                        <select v-model="agencesId"  id="agence" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          <option selected value="">Selectionner une agence</option>
+                          <option :value="item.id" v-for="(item, index) in tbAgences" :key="index">{{ item.libelle }}</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label
+                          for="compteNbre"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Nombre total de gagnant</label
                         >
                         <input
                           type="text"
-                          id="ville"
-                          v-model="ville" 
+                          id="compteNbre"
+                          v-model="compteNbre" 
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label
-                          for="quartier"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Quartier</label
-                        >
-                        <input
-                          type="text"
-                          id="quartier"
-                          v-model="quartier" 
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div class="mt-4 grid gap-6 md:grid-cols-2">
-                      <div>
-                        <label
-                          for="heuredebutTravail"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure debut Travail</label
-                        >
-                        <input
-                          type="time"
-                          v-model="heuredebutTravail" 
-                          id="heuredebutTravail"
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label
-                          for="heuredefinTravail"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure de fin Travail</label
-                        >
-                        <input
-                          type="time"
-                          id="heuredefinTravail"
-                          v-model="heuredefinTravail" 
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
+                          placeholder="ex : 1"
                           required
                         />
                       </div>
@@ -380,6 +345,7 @@
         </div>
       </Dialog>
     </TransitionRoot>
+
 
     <TransitionRoot appear :show="isOpenUpdate" as="template">
       <Dialog as="div" @close="onCloseUpdateModal" class="relative z-10">
@@ -415,90 +381,41 @@
                   as="h3"
                   class="text-lg font-medium leading-6 text-gray-900"
                 >
-                  Modification de l'agence : {{ libelleUpdated }}
+                  Modification
                 </DialogTitle>
                 <hr class="my-4" />
                 <div class="mt-4">
                   <form @submit.prevent="onSubmitUpdated">
                     <div>
                       <label
-                        for="libelleUpdated"
+                        for="recompenseUpdated1"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >Nom de l'agence</label
+                        >Montant de recompense</label
                       >
                       <input
-                        type="text"
-                        id="libelleUpdated"
-                        v-model="libelleUpdated" 
+                        type="number"
+                        id="recompenseUpdated1"
+                        v-model="recompenseUpdated" 
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="ex : Agence 1"
+                        placeholder="ex : 100000"
                         required
                       />
                     </div>
-                    <div class="mt-4 grid gap-6 md:grid-cols-2">
-                      <div>
+                    <div class="mt-4">
                         <label
-                          for="villeUpdated"
+                          for="compteNbre"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Ville</label
+                          >Nombre total de gagnant</label
                         >
                         <input
-                          type="text"
-                          id="villeUpdated"
-                          v-model="villeUpdated" 
+                          type="number"
+                          id="compteNbre"
+                          v-model="compteNbreUpdated" 
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
+                          placeholder="ex : 1"
                           required
                         />
                       </div>
-                      <div>
-                        <label
-                          for="quartierUpdated"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Quartier</label
-                        >
-                        <input
-                          type="text"
-                          id="quartierUpdated"
-                          v-model="quartierUpdated" 
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div class="mt-4 grid gap-6 md:grid-cols-2">
-                      <div>
-                        <label
-                          for="heuredebutTravailUpdated"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure debut Travail</label
-                        >
-                        <input
-                          type="time"
-                          v-model="heuredebutTravailUpdated" 
-                          id="heuredebutTravailUpdated"
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label
-                          for="heuredefinTravailUpdated"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure de fin Travail</label
-                        >
-                        <input
-                          type="time"
-                          id="heuredefinTravailUpdated"
-                          v-model="heuredefinTravailUpdated" 
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                    </div>
                     <div class="mt-5 text-center">
                       <button
                         :disabled="isloadingUpdated"
@@ -562,10 +479,10 @@
                   Suprresion
                 </DialogTitle>
                 <div class="mt-2 text-center">
-                  <p class="text-sm text-gray-500">
-                    Voulez-vous vraiment supprimer cet agence ?
+                  <p class="text-md text-gray-500">
+                    Voulez-vous vraiment supprimer ce suivi d'horaire ?
                   </p>
-                  <b>{{ libelleAgence }}</b>
+                  <b>{{ libelledateComplet }}</b>
                 </div>
 
                 <div class="mt-4 text-center">
@@ -603,6 +520,9 @@ const { $toast, $axios } = useNuxtApp();
 // const nuxtApp = useNuxtApp()
 const router = useRouter();
 
+const tbSuivisHoraires = ref([]);
+const isloading = ref(false);
+
 import {
   TransitionRoot,
   TransitionChild,
@@ -615,23 +535,19 @@ const isOpen = ref(false);
 const isOpenDelete = ref(false);
 const isOpenUpdate = ref(false);
 
-const libelleAgence = ref("");
-const idAgence = ref("");
+const libelledateComplet = ref("");
+const idReportingsDelete = ref("");
 const btnLibelle = ref("Oui");
 
-const libelle = ref("");
-const ville = ref("");
-const quartier = ref("");
-const heuredebutTravail = ref("");
-const heuredefinTravail = ref("");
+const compteNbre = ref("");
+const recompense = ref("");
+const agencesId = ref("");
 const btnAjouter = ref("Enregistrer");
 
-const idAgenceUpdate = ref("");
-const libelleUpdated = ref("");
-const villeUpdated = ref("");
-const quartierUpdated = ref("");
-const heuredebutTravailUpdated = ref("");
-const heuredefinTravailUpdated = ref("");
+const idReportingsUpdate = ref("");
+const compteNbreUpdated = ref("");
+const recompenseUpdated = ref("");
+const agencesIdUpdated = ref("");
 const btnUpdated = ref("Modifier");
 
 const tbAgences = ref([]);
@@ -641,6 +557,7 @@ const isloadingDelete = ref(false);
 const isloadingAdd = ref(false);
 const isloadingUpdated = ref(false);
 
+
 const onOpenModal = async () => {
   isOpen.value = true;
 };
@@ -649,23 +566,11 @@ const onCloseModal = async () => {
   isOpen.value = false;
 };
 
-const onOpenDeleteModal = async (item) => {
-  libelleAgence.value = item.libelle;
-  idAgence.value = item.id;
-  isOpenDelete.value = true;
-};
-
-const onCloseDeleteModal = async () => {
-  isOpenDelete.value = false;
-};
-
 const onOpenUpdateModal = async (item) => {
-  libelleUpdated.value = item.libelle;
-  villeUpdated.value = item.ville;
-  quartierUpdated.value = item.quartier;
-  heuredebutTravailUpdated.value = item.heuredebutTravail;
-  heuredefinTravailUpdated.value = item.heuredefinTravail;
-  idAgenceUpdate.value = item.id;
+  compteNbreUpdated.value = item.reportings.compteNbre;
+  recompenseUpdated.value = item.reportings.recompense;
+  agencesIdUpdated.value = item.agences.id;
+  idReportingsUpdate.value = item.reportings.id;
   isOpenUpdate.value = true;
 };
 
@@ -673,16 +578,24 @@ const onCloseUpdateModal = async () => {
   isOpenUpdate.value = false;
 };
 
+const onOpenDeleteModal = async (item) => {
+  libelledateComplet.value = item.reportings.dateComplet;
+  idReportingsDelete.value = item.reportings.id;
+  isOpenDelete.value = true;
+};
+
+const onCloseDeleteModal = async () => {
+  isOpenDelete.value = false;
+};
+
 const onSubmit = async () => {
   isloadingAdd.value = true;
   btnAjouter.value = "enregistrement en cours...";
   await $axios
-    .post("/api/agences", {
-      libelle: libelle.value,
-      ville: ville.value,
-      quartier: quartier.value,
-      heuredebutTravail: heuredebutTravail.value,
-      heuredefinTravail: heuredefinTravail.value,
+    .post("/api/reportings", {
+      compteNbre: compteNbre.value,
+      recompense: recompense.value,
+      agencesId: agencesId.value,
     })
     .finally(() => {
       isloadingAdd.value = false;
@@ -691,13 +604,11 @@ const onSubmit = async () => {
       btnAjouter.value = "Enregistrer";
       onCloseModal();
       $toast.success(data.message);
-      onGetAgences();
+      onGetReportings();
 
-      libelle.value = "";
-      ville.value = "";
-      quartier.value = "";
-      heuredebutTravail.value = "";
-      heuredefinTravail.value = "";
+      compteNbre.value = "";
+      recompense.value = "";
+      agencesId.value = "";
     })
     .catch((error) => {
       btnAjouter.value = "Enregistrer";
@@ -709,12 +620,10 @@ const onSubmitUpdated = async () => {
   isloadingUpdated.value = true;
   btnUpdated.value = "modification en cours...";
   await $axios
-    .put("/api/agences/"+ idAgenceUpdate.value, {
-      libelle: libelleUpdated.value,
-      ville: villeUpdated.value,
-      quartier: quartierUpdated.value,
-      heuredebutTravail: heuredebutTravailUpdated.value,
-      heuredefinTravail: heuredefinTravailUpdated.value,
+    .put("/api/reportings/"+ idReportingsUpdate.value, {
+      compteNbre: compteNbreUpdated.value,
+      recompense: recompenseUpdated.value,
+      agencesId: agencesIdUpdated.value,
     })
     .finally(() => {
       isloadingUpdated.value = false;
@@ -723,13 +632,11 @@ const onSubmitUpdated = async () => {
       btnUpdated.value = "Modifier";
       onCloseUpdateModal();
       $toast.success(data.message);
-      onGetAgences();
+      onGetReportings();
 
-      libelleUpdated.value = "";
-      villeUpdated.value = "";
-      quartierUpdated.value = "";
-      heuredebutTravailUpdated.value = "";
-      heuredefinTravailUpdated.value = "";
+      compteNbreUpdated.value = "";
+      recompenseUpdated.value = "";
+      agencesIdUpdated.value = "";
     })
     .catch((error) => {
       btnUpdated.value = "Enregistrer";
@@ -737,11 +644,12 @@ const onSubmitUpdated = async () => {
     });
 };
 
+
 const onSubmitDelete = async () => {
   isloadingDelete.value = true;
   btnLibelle.value = "Suppression en cours...";
   await $axios
-    .delete("/api/agences/" + idAgence.value)
+    .delete("/api/reportings/" + idReportingsDelete.value)
     .finally(() => {
       isloadingDelete.value = false;
     })
@@ -749,11 +657,18 @@ const onSubmitDelete = async () => {
       btnLibelle.value = "Oui";
       onCloseDeleteModal();
       $toast.success(data.message);
-      onGetAgences();
+      onGetReportings();
     })
     .catch((error) => {
       $toast.error(error.response.data.message);
     });
+};
+
+const getOneSuivis= async (item) => {
+  localStorage.setItem('idReportings', item.reportings.id)
+  localStorage.setItem('statusReportings', item.reportings.status)
+  localStorage.setItem('idAgencesReportings', item.agences.id)
+  router.push(`/admin/suivi-horaire/${item.agences.libelle}`);
 };
 
 const onGetAgences = async () => {
@@ -771,14 +686,43 @@ const onGetAgences = async () => {
     });
 };
 
-const getOneAgence = async (item) => {
-  localStorage.setItem('idAgence', item.id)
-  router.push(`/admin/parametres/${item.libelle}`);
+const onGetReportings = async () => {
+  isloading.value = true;
+  await $axios
+    .get("/api/reportings")
+    .finally(() => {
+      isloading.value = false;
+    })
+    .then(({ data }) => {
+      tbSuivisHoraires.value = data;
+    })
+    .catch((error) => {
+      $toast.error(error.response.data.message);
+    });
 };
+
+const onCheckUpdatedlast = async () => {
+  isloading.value = true;
+    await $axios
+      .put("/api/reportings/reportingsupdatedlast")
+      .finally(() => {
+        isloading.value = false;
+      })
+      .then(({ data }) => {
+        //tbHistoriques.value = data;
+        console.log(data.message)
+      })
+      .catch((error) => {
+        //$toast.error(error.response.data.message);
+        console.log(error.response.data.message)
+      });
+  };
 
 // initialize components based on data attribute selectors
 onMounted(() => {
   initFlowbite();
-  onGetAgences();
+  onCheckUpdatedlast()
+  onGetAgences()
+  onGetReportings()
 });
 </script>
