@@ -53,6 +53,8 @@ export const pointages = sqliteTable('pointages', {
   heureDepart: text('heure_depart'),
   pointSuccess: integer('point_success'),
   pointDanger: integer('point_danger'),
+  observation: text("observation").default(''),
+  satisfrationAgent: text("satisfration_agent").default(''),
   reportingsId: integer('reportings_id').references(() => reportings.id),
   agencesId: integer('agences_id').references(() => agences.id),
   status: integer("status").default(1),

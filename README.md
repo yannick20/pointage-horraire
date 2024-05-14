@@ -46,6 +46,9 @@ Build the application for production:
 # npm
 npm run build
 
+# deploy docker app
+docker-compose up -d
+
 # pnpm
 pnpm run build
 

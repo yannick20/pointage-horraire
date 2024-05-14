@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "68e6f2da-45d8-4859-a7aa-fc9884f9ce12",
+  "id": "4f18069a-71e4-4b85-b00e-441a0f883fb9",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "agences": {
@@ -137,6 +137,22 @@
           "notNull": false,
           "autoincrement": false
         },
+        "observation": {
+          "name": "observation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
+        "satisfration_agent": {
+          "name": "satisfration_agent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
         "reportings_id": {
           "name": "reportings_id",
           "type": "integer",
@@ -267,7 +283,7 @@
         },
         "recompense": {
           "name": "recompense",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
