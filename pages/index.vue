@@ -31,9 +31,10 @@
                     type="text"
                     name="phone"
                     id="phone"
+                    v-model="phone" 
                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="ex: 0612345678"
-                    required=""
+                    required
                   />
                 </div>
                 <div>
@@ -46,17 +47,19 @@
                     type="password"
                     name="password"
                     id="password"
+                    v-model="password" 
                     placeholder="••••••••"
                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
+                    required
                   />
                 </div>
 
                 <button
                   type="submit"
+                  :disabled="isloader"
                   class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
-                  Sign in
+                  {{btnName}}
                 </button>
               </form>
             </div>
@@ -81,22 +84,40 @@ const btnName = ref("Se connecter");
 const isloader = ref(false);
 
 const onSubmit = async () => {
-  $toast.success("Connexion reussie");
-  router.replace("/admin");
-  // try {
-  //     isloader.value = true;
-  //     const { data } = await $axios.post('/auth/login', {
-  //         phone: phone.value,
-  //         password: password.value
-  //     })
-  //     if (data) {
-  //         $toast.success(data.message);
-  //         router.push({ path: '/' })
-  //     }
-  // } catch (error) {
-  //     $toast.error(error.response.data.message);
-  // }
-  // isloader.value = false;
+  
+  isloader.value = true;
+  btnName.value = "connexion en cours...";
+  await $axios
+    .post("/api/users/auth", {
+      phone: phone.value,
+      password: password.value,
+    })
+    .finally(() => {
+      isloader.value = false;
+    })
+    .then(({ data }) => {
+      btnName.value = "Se connecter";
+      $toast.success(data.message);
+
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('id', data.userItem.id)
+      localStorage.setItem('nom', data.userItem.nom)
+      localStorage.setItem('prenom', data.userItem.prenom)
+      localStorage.setItem('phone', data.userItem.phone)
+      localStorage.setItem('fonction', data.userItem.fonction)
+      localStorage.setItem('role', data.userItem.role)
+      localStorage.setItem('agencesId', data.userItem.agencesId)
+
+      phone.value = "";
+      password.value = "";
+
+      router.replace("/admin");
+
+    })
+    .catch((error) => {
+      btnName.value = "Se connecter";
+      $toast.error(error.response.data.message);
+    });
 };
 
 // initialize components based on data attribute selectors

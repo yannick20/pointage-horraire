@@ -44,6 +44,20 @@
               </span
             >
             <p class="text-gray-500" :style="item.pointages.heureArrive !== '' ? '' : 'display : none'">Heurre d'arrive :  {{ item.pointages.heureArrive}}</p>
+            
+            <div class="mt-5">
+              <input
+              :style="item.pointages.heureArrive === '' ? '' : 'display : none'"
+                    type="time"
+                    name="heureArrive"
+                    id="heureArrive"
+                    v-model="heureArrive" 
+                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="ex: 0612345678"
+                    required
+                  />
+            </div>
+            
             <div class="flex mt-4 md:mt-6">
               <button
               @click="onCheckHeure(item)"
@@ -52,11 +66,12 @@
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >Arrive</button
               >
-              <button
+              
+              <!-- <button
               :style="item.pointages.heureArrive !== '' ? '' : 'display : none'"
                 class="inline-flex items-center px-4 py-2 ml-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >Depart</button
-              >
+              > -->
             </div>
           </div>
         </div>
@@ -79,7 +94,7 @@ const isloading = ref(false);
 
 const dateOnly = ref("");
 
-const phone = ref("");
+const heureArrive = ref("");
 const password = ref("");
 const btnName = ref("Se connecter");
 
@@ -91,31 +106,34 @@ const isloader = ref(false);
 
 const onCheckHeure = async (item: any) =>{
 
-  // Heure initiale
+  if (heureArrive.value == "") {
+    $toast.error("Saisissez un heure d'arriver");
+  } else {
+     // Heure initiale
   const heureInitiale = item.agences.heuredebutTravail;
 
-  //Date
-  const dateonly = format(new Date(), 'yyyy-MM-dd', { locale: fr })
+//Date
+const dateonly = format(new Date(), 'yyyy-MM-dd', { locale: fr })
 
-  // Conversion de l'heure initiale en objet Date
-  const heureInitialeDate = new Date(`${dateonly}T${heureInitiale}:00`);
+// Conversion de l'heure initiale en objet Date
+const heureInitialeDate = new Date(`${dateonly}T${heureInitiale}:00`);
 
-  // Ajout de 5 minutes
+// Ajout de 5 minutes
 const heureFinaleDate = addMinutes(heureInitialeDate, 5);
 
 // Formatage de l'heure finale au format HH:mm
 const heureFinale = format(heureFinaleDate, 'HH:mm');
 
 // Heure à vérifier
-//const heureAVerifier = '03:28';
-const heureAVerifier = format(new Date(), 'HH:mm', { locale: fr });
+//const heureAVerifier = '03:28'; format(new Date(), 'HH:mm', { locale: fr });
+const heureAVerifier = heureArrive.value
 
 // Convertir les chaînes d'heure en objets Date
 const heureDebutDate = parse(heureInitiale, 'HH:mm', new Date());
 const heureFinDate = parse(heureFinale, 'HH:mm', new Date());
 const heureAVerifierDate = parse(heureAVerifier, 'HH:mm', new Date());
 
-// console.log(`Heure initiale : ${heureInitiale}`);
+//console.log(`Heure heureArrive : ${heureArrive.value}`);
 // console.log(`Heure finale : ${heureFinale}`);
 
 // console.log(`Heure actuel : ${format(new Date(), 'HH:mm', { locale: fr })}`);
@@ -127,9 +145,9 @@ if (estDansIntervalle) {
     //console.log(`${heureAVerifier} est dans l'intervalle ${heureInitiale}-${heureFinale}.`);
     const pointSuccess = item.pointages.pointSuccess + 2;
     //console.log(`point gagne : ${pointSuccess}`);
-    console.log(heureAVerifier)
-   console.log(pointSuccess)
-   console.log(item.pointages.id)
+  //   console.log(heureAVerifier)
+  //  console.log(pointSuccess)
+  //  console.log(item.pointages.id)
     await $axios
       .put("/api/pointages/pointagesuccess", {
         keyheureArrive: heureAVerifier,
@@ -142,7 +160,7 @@ if (estDansIntervalle) {
       .then(({ data }) => {
         //tbHistoriques.value = data;
         $toast.success(data.message);
-        console.log(data.message)
+        //console.log(data.message)
         onGetPointagesOnly();
       })
       .catch((error) => {
@@ -155,9 +173,9 @@ if (estDansIntervalle) {
     const pointSuccess = item.pointages.pointSuccess - 2;
     const pointDanger = item.pointages.pointDanger + pointSuccess;
 
-    console.log(heureAVerifier)
-   console.log(pointDanger)
-   console.log(item.pointages.id)
+  //   console.log(heureAVerifier)
+  //  console.log(pointDanger)
+  //  console.log(item.pointages.id)
     //console.log(`point perdu : ${pointDanger}`);
     await $axios
       .put("/api/pointages/pointagedanger", {
@@ -171,7 +189,7 @@ if (estDansIntervalle) {
       .then(({ data }) => {
         //tbHistoriques.value = data;
         $toast.success(data.message);
-        console.log(data.message)
+        //console.log(data.message)
         onGetPointagesOnly();
       })
       .catch((error) => {
@@ -179,6 +197,9 @@ if (estDansIntervalle) {
         console.log(error.response.data.message)
       });
 }
+  }
+
+ 
 
 }
 
