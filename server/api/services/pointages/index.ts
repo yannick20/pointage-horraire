@@ -109,6 +109,15 @@ class PointagesService {
     return itemUserOne;
   }
 
+  public async getCheckPointages(id: number) {
+    const itemUsers = db
+      .select()
+      .from(pointages)
+      .where(eq(pointages.reportingsId, id))
+      .all();
+    return itemUsers;
+  }
+
   public async postPointages(insertItem: InsertPointages) {
     const itemPost = db.insert(pointages).values(insertItem).returning().all();
     return itemPost;
@@ -119,6 +128,15 @@ class PointagesService {
       .update(pointages)
       .set(editItem)
       .where(eq(pointages.id, parseInt(itemId)))
+      .run();
+    return itemUpdated;
+  }
+
+  public async updatedPointagesObservation(editItem: string, itemId: string, idUser: number) {
+    const itemUpdated = db
+      .update(pointages)
+      .set({ observation: editItem})
+      .where(and(eq(pointages.id, parseInt(itemId)), eq(pointages.userId, idUser)))
       .run();
     return itemUpdated;
   }

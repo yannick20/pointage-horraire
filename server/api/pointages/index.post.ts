@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       });
     }
   
-    const userid = await userService.getAllUsersId(body.agencesId);
+    const userid = await userService.getAllUsersIdByRole(body.agencesId);
   
     if(userid.length == 0){
       throw createError({

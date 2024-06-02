@@ -1,6 +1,6 @@
 import { users, InsertUser, agences } from "@/db/schema";
 import { db } from "@/server/api/services/sqlite-service";
-import { eq, count, or } from "drizzle-orm";
+import { eq, count, or, and } from "drizzle-orm";
 
 class UserService {
 
@@ -36,13 +36,20 @@ class UserService {
     return usersAll;
   }
 
+  public async getAllUsersIdByRole(id: number) {
+    const usersAll = db.select({
+      id: users.id,
+    }).from(users).where(and(eq(users.agencesId, id), eq(users.role, 'Utilisateur'))).all();
+    return usersAll;
+  }
+
   public async getUserById(id: number) {
     const user = db.select().from(users).where(eq(users.id, id)).get();
     return user;
   }
 
   public async getUserCount(id: number) {
-    const usercount = db.select().from(users).where(eq(users.agencesId, id)).all();
+    const usercount = db.select().from(users).where(and(eq(users.agencesId, id), eq(users.role, 'Utilisateur'))).all();
     //console.log(usercount.length)
     return usercount.length;
   }

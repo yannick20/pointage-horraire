@@ -198,7 +198,16 @@
                         </div>
                     </td>
                     <td class="px-4 py-3">
-                        <!-- {{ item.phone }} -->
+                      <div
+                      v-show="item.pointages.observation"
+                          :class="item.pointages.observation == 'Agent Nul' ? 'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0' : item.pointages.observation == 'Agent Moyen' ? 'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-yellow-100 text-yellow-800 md:mt-2 lg:mt-0' : 'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0'"
+                        >
+                          
+                        {{ item.pointages.observation }}
+                        </div>
+                        
+                        <a href="#" v-show="!item.pointages.observation" @click="onOpenUpdateModal(item)" class="text-sm text-gray-500">Ajouter une observation</a>
+
                     </td>
                     <td class="px-4 py-3">
                         {{ item.pointages.dateComplet }}
@@ -294,6 +303,85 @@
             </div>
         </Dialog>
     </TransitionRoot>
+
+    <TransitionRoot appear :show="isObsOpen" as="template">
+      <Dialog as="div" @close="onCloseObsModal" class="relative z-10">
+        <TransitionChild
+          as="template"
+          enter="duration-300 ease-out"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="duration-200 ease-in"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black/25" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 overflow-y-auto">
+          <div
+            class="flex min-h-full items-center justify-center p-4 text-center"
+          >
+            <TransitionChild
+              as="template"
+              enter="duration-300 ease-out"
+              enter-from="opacity-0 scale-95"
+              enter-to="opacity-100 scale-100"
+              leave="duration-200 ease-in"
+              leave-from="opacity-100 scale-100"
+              leave-to="opacity-0 scale-95"
+            >
+              <DialogPanel
+                class="w-full max-w-xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+              >
+                <DialogTitle
+                  as="h3"
+                  class="text-lg font-medium leading-6 text-gray-900"
+                >
+                  Ajouter un Suivi d'horaire
+                </DialogTitle>
+                <hr class="my-4" />
+                <div class="mt-4">
+                  <form @submit.prevent="onSubmitUpdated">
+                    <div>
+                      <label
+                        for="recompense1"
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        >Observation</label
+                      >
+                      <select v-model="libelleObs" requiredid="agence" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          <option selected value="">Selectionne un type</option>
+                          <option value="Agent Nul">Agent Nul</option>
+                          <option value="Agent Moyen">Agent Moyen</option>
+                          <option value="Agent Excellent">Agent Excellent</option>
+                        </select>
+                    </div>
+                   
+                    <div class="mt-5 text-center">
+                      <button
+                        :disabled="isloadingAdd"
+                        @click="onCloseObsModal"
+                        type="button"
+                        class="mr-2 inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                      >
+                        Non
+                      </button>
+                      <button
+                        :disabled="isloadingAdd"
+                        type="submit"
+                        class="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+                      >
+                        {{ btnAjouter }}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
   
     </div>
   </template>
@@ -321,8 +409,12 @@
   const isloadingPointages = ref(false);
   
   const isOpen = ref(false);
+  const isObsOpen = ref(false);
 
   const isCheckBtn = ref(false);
+
+
+  const libelleObs = ref("");
   
   const nom = ref("");
   const prenom = ref("");
@@ -333,10 +425,14 @@
   const password = ref("");
   const btnAjouter = ref("Oui");
 
-  
+  const idpointagesUpdate = ref("");
+const idUser = ref("");
+
   const isloadingDelete = ref(false);
   const isloadingAdd = ref(false);
   const isloadingUpdated = ref(false);
+
+  const btnUpdated = ref("Modifier");
   
   const onOpenModal = async () => {
     isOpen.value = true;
@@ -345,6 +441,27 @@
   const onCloseModal = async () => {
     isOpen.value = false;
   };
+
+  const onOpenObsModal = async () => {
+    isObsOpen.value = true;
+  };
+  
+  const onCloseObsModal = async () => {
+    isObsOpen.value = false;
+  };
+
+  const onOpenUpdateModal = async (item: any) => {
+    if (isCheckBtn.value == false) {
+      console.log(item.pointages)
+      idUser.value = item.pointages.userId;
+      idpointagesUpdate.value = item.pointages.id;
+      onOpenObsModal();
+    } else {
+      $toast.error("Impossible d'ajouter une observation car ce pointage est deja cloture");
+    }
+  
+  
+};
   
   const onSubmit = async () => {
     isloadingAdd.value = true;
@@ -371,6 +488,36 @@
         $toast.error(error.response.data.message);
       });
   };
+
+  const onSubmitUpdated = async () => {
+  isloadingUpdated.value = true;
+  btnUpdated.value = "modification en cours...";
+
+  //const idreportings = localStorage.getItem("idReportings");
+
+  await $axios
+    .put("/api/pointages/pointageobservation", {
+      keyObservation: libelleObs.value,
+      keyiduser: idUser.value,
+      keyid: idpointagesUpdate.value,
+    })
+    .finally(() => {
+      isloadingUpdated.value = false;
+    })
+    .then(({ data }) => {
+      btnUpdated.value = "Modifier";
+      onGetPointages();
+      onCloseObsModal();
+      $toast.success(data.message);
+      
+
+      libelleObs.value = "";
+    })
+    .catch((error) => {
+      btnUpdated.value = "Modifier";
+      $toast.error(error.response.data.message);
+    });
+};
 
   const onCheckBtn = async () => {
     const statusreportings = localStorage.getItem("statusReportings");

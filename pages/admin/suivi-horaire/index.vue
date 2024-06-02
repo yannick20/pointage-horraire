@@ -155,7 +155,7 @@
                     <td class="px-4 py-3">{{item.reportings.totalAgent}}</td>
                     <td class="px-4 py-3">{{item.reportings.recompense}} FCFA</td>
                     <td class="px-4 py-3">{{item.reportings.compteNbre}}</td>
-                    <td class="px-4 py-3">{{item.reportings.status == 1 ? 'En cours' : 'Termier'}} </td>
+                    <td class="px-4 py-3">{{item.reportings.status == 1 ? 'En cours' : 'Termier'}} {{ item.reportings.status }} </td>
                     <td class="flex items-center justify-center">
                       <button
                         @click="getOneSuivis(item)"
@@ -639,7 +639,7 @@ const onSubmitUpdated = async () => {
       agencesIdUpdated.value = "";
     })
     .catch((error) => {
-      btnUpdated.value = "Enregistrer";
+      btnUpdated.value = "Modifier";
       $toast.error(error.response.data.message);
     });
 };
@@ -660,6 +660,8 @@ const onSubmitDelete = async () => {
       onGetReportings();
     })
     .catch((error) => {
+      btnLibelle.value = "Oui";
+      onCloseDeleteModal();
       $toast.error(error.response.data.message);
     });
 };
