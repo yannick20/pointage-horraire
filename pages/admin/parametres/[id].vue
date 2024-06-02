@@ -160,8 +160,8 @@
                     >
                       {{ item.nom }} {{ item.prenom }}
                     </th>
-                    <td class="px-4 py-3">{{ item.phone }}</td>
                     <td class="px-4 py-3">{{ item.fonction }}</td>
+                    <td class="px-4 py-3">{{ item.phone }}</td>
                     <td class="px-4 py-3">{{ item.quartier }}</td>
                     <td class="px-4 py-3">{{ item.role }}</td>
                     <!-- <td class="px-4 py-3">{{ item.status }}</td> -->
@@ -348,7 +348,7 @@
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                           >Role</label
                         >
-                        <select v-model="role"  id="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select v-model="role" required id="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                           <option selected value="">Selectionner un role</option>
                           <option value="Administrateur">Administrateur</option>
                           <option value="Utilisateur">Utilisateur</option>
