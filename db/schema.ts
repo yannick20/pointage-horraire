@@ -6,8 +6,7 @@ export const agences = sqliteTable("agences", {
   libelle: text("libelle"),
   ville: text("ville"),
   quartier: text("quartier"),
-  heuredebutTravail: text("heuredebut_travail"),
-  heuredefinTravail: text("heurefin_travail"),
+  //heuredefinTravail: text("heurefin_travail"),
   status: integer("status").default(1),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
@@ -21,6 +20,8 @@ export const users = sqliteTable("users", {
   quartier: text("quartier"),
   role: text("role"),
   password: text("password"),
+  heuredebutTravail: text("heuredebut_travail").default(''),
+  heureRetard: text("heure_retard").default(''),
   status: integer("status").default(1),
   agencesId: integer('agences_id').references(() => agences.id),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),

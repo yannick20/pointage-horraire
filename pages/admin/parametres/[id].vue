@@ -130,6 +130,8 @@
                     <th scope="col" class="px-4 py-3">Telephone</th>
                     <th scope="col" class="px-4 py-3">Quartier</th>
                     <th scope="col" class="px-4 py-3">Role</th>
+                    <th scope="col" class="px-4 py-3">Heure de debut</th>
+                    <th scope="col" class="px-4 py-3">Minute de Retard</th>
                     <!-- <th scope="col" class="px-4 py-3">Status</th> -->
                     <th scope="col" class="px-4 py-3">
                       <span class="sr-only">Actions</span>
@@ -164,6 +166,8 @@
                     <td class="px-4 py-3">{{ item.phone }}</td>
                     <td class="px-4 py-3">{{ item.quartier }}</td>
                     <td class="px-4 py-3">{{ item.role }}</td>
+                    <td class="px-4 py-3">{{ item.heuredebutTravail == '' ? 0 : item.heuredebutTravail }}</td>
+                    <td class="px-4 py-3">{{ item.heureRetard == '' ? 0 : parseInt(item.heureRetard)  }} Min</td>
                     <!-- <td class="px-4 py-3">{{ item.status }}</td> -->
                     <td class="px-4 py-3 flex items-center justify-center">
                       <button
@@ -370,11 +374,43 @@
                         />
                       </div>
                     </div>
-                    <div class="mt-4">
+                    <div class="mt-4 grid gap-6 md:grid-cols-2">
+                      <div>
+                        <label
+                          for="heuredebutTravail"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Heure debut Travail</label
+                        >
+                        <input
+                          type="time"
+                          v-model="heuredebutTravail" 
+                          id="heuredebutTravail"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : 1"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label
+                          for="heureRetardTravail"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Minute de retard (Min)</label
+                        >
+                        <input
+                          type="number"
+                          id="heureRetardTravail"
+                          v-model="heureRetardTravail" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : 10"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="mt-4" v-show="role=='Administrateur'">
                         <label
                           for="password"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >password</label
+                          >Mot de passe</label
                         >
                         <input
                           type="password"
@@ -382,7 +418,7 @@
                           v-model="password" 
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="ex : Agence 1"
-                          required
+                          :required="role=='Administrateur'"
                         />
                       </div>
                     <div class="mt-5 text-center">
@@ -543,6 +579,38 @@
                         />
                       </div>
                     </div>
+                    <div class="mt-4 grid gap-6 md:grid-cols-2">
+                      <div>
+                        <label
+                          for="heuredebutTravailUpdated"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Heure debut Travail</label
+                        >
+                        <input
+                          type="time"
+                          v-model="heuredebutTravailUpdated" 
+                          id="heuredebutTravailUpdated"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : 1"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label
+                          for="heureRetardTravailUpdated"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                          >Minute de retard (Min)</label
+                        >
+                        <input
+                          type="number"
+                          id="heureRetardTravailUpdated"
+                          v-model="heureRetardTravailUpdated" 
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="ex : 10"
+                          required
+                        />
+                      </div>
+                    </div>
                     <div class="mt-5 text-center">
                       <button
                         :disabled="isloadingUpdated"
@@ -668,6 +736,8 @@ const phone = ref("");
 const fonction = ref("");
 const quartier = ref("");
 const role = ref("");
+const heuredebutTravail = ref("");
+const heureRetardTravail = ref("");
 const password = ref("");
 const btnAjouter = ref("Enregistrer");
 
@@ -677,6 +747,8 @@ const phoneUpdated = ref("");
 const fonctionUpdated = ref("");
 const quartierUpdated = ref("");
 const roleUpdated = ref("");
+const heuredebutTravailUpdated = ref("");
+const heureRetardTravailUpdated = ref("");
 const idUpdated = ref("");
 const btnUpdated = ref("Modifier");
 
@@ -713,6 +785,8 @@ const onOpenUpdateModal = async (item) => {
   fonctionUpdated.value = item.fonction;
   quartierUpdated.value = item.quartier;
   roleUpdated.value = item.role;
+  heuredebutTravailUpdated.value = item.heuredebutTravail;
+  heureRetardTravailUpdated.value = item.heureRetard;
   idUpdated.value = item.id;
   isOpenUpdate.value = true;
 };
@@ -733,6 +807,8 @@ const onSubmit = async () => {
       fonction: fonction.value,
       quartier: quartier.value,
       role: role.value,
+      heuredebutTravail: heuredebutTravail.value,
+      heureRetard: heureRetardTravail.value,
       password: password.value,
       agencesId: agencesid,
     })
@@ -770,6 +846,8 @@ const onSubmitUpdated = async () => {
       fonction: fonctionUpdated.value,
       quartier: quartierUpdated.value,
       role: roleUpdated.value,
+      heuredebutTravail: heuredebutTravailUpdated.value,
+      heureRetard: heureRetardTravailUpdated.value,
     })
     .finally(() => {
       isloadingUpdated.value = false;
@@ -784,7 +862,7 @@ const onSubmitUpdated = async () => {
       villeUpdated.value = "";
       quartierUpdated.value = "";
       heuredebutTravailUpdated.value = "";
-      heuredefinTravailUpdated.value = "";
+      heureRetardTravailUpdated.value = "";
     })
     .catch((error) => {
       btnUpdated.value = "Enregistrer";

@@ -75,4 +75,13 @@ yarn preview
 bun run preview
 ```
 
+```bash
+# drizzle
+
+npm exec drizzle-kit generate:sqlite --out migrations --schema db/schema.ts
+
+npm exec drizzle-kit push:sqlite
+
+```
+
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

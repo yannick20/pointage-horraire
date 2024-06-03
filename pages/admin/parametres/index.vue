@@ -125,8 +125,6 @@
                     <th scope="col" class="px-4 py-3">Nom de l'agence</th>
                     <th scope="col" class="px-4 py-3">Ville</th>
                     <th scope="col" class="px-4 py-3">Quartier</th>
-                    <th scope="col" class="px-4 py-3">Heure de debut</th>
-                    <th scope="col" class="px-4 py-3">Heure de fin</th>
                     <th scope="col" class="px-4 py-3">
                       <span class="sr-only">Actions</span>
                     </th>
@@ -136,12 +134,12 @@
                   <tr
                     v-if="tbAgences.length === 0 && isloadingAgences == false"
                   >
-                    <td colspan="6" class="py-4 text-center">
+                    <td colspan="4" class="py-4 text-center">
                       Aucune donnée n'a été trouvé
                     </td>
                   </tr>
                   <tr v-if="isloadingAgences">
-                    <td colspan="6" class="py-4 text-center">
+                    <td colspan="4" class="py-4 text-center">
                       Chargement des données...
                     </td>
                   </tr>
@@ -156,8 +154,6 @@
                     </th>
                     <td class="px-4 py-3">{{ item.ville }}</td>
                     <td class="px-4 py-3">{{ item.quartier }}</td>
-                    <td class="px-4 py-3">{{ item.heuredebutTravail }}</td>
-                    <td class="px-4 py-3">{{ item.heuredefinTravail }}</td>
                     <td class="flex items-center justify-center">
                       <button
                         @click="getOneAgence(item)"
@@ -323,7 +319,7 @@
                         />
                       </div>
                     </div>
-                    <div class="mt-4 grid gap-6 md:grid-cols-2">
+                    <!-- <div class="mt-4 grid gap-6 md:grid-cols-2">
                       <div>
                         <label
                           for="heuredebutTravail"
@@ -354,7 +350,7 @@
                           required
                         />
                       </div>
-                    </div>
+                    </div> -->
                     <div class="mt-5 text-center">
                       <button
                         :disabled="isloadingAdd"
@@ -467,38 +463,7 @@
                         />
                       </div>
                     </div>
-                    <div class="mt-4 grid gap-6 md:grid-cols-2">
-                      <div>
-                        <label
-                          for="heuredebutTravailUpdated"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure debut Travail</label
-                        >
-                        <input
-                          type="time"
-                          v-model="heuredebutTravailUpdated" 
-                          id="heuredebutTravailUpdated"
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label
-                          for="heuredefinTravailUpdated"
-                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                          >Heure de fin Travail</label
-                        >
-                        <input
-                          type="time"
-                          id="heuredefinTravailUpdated"
-                          v-model="heuredefinTravailUpdated" 
-                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="ex : Agence 1"
-                          required
-                        />
-                      </div>
-                    </div>
+                    
                     <div class="mt-5 text-center">
                       <button
                         :disabled="isloadingUpdated"
@@ -681,8 +646,8 @@ const onSubmit = async () => {
       libelle: libelle.value,
       ville: ville.value,
       quartier: quartier.value,
-      heuredebutTravail: heuredebutTravail.value,
-      heuredefinTravail: heuredefinTravail.value,
+      // heuredebutTravail: heuredebutTravail.value,
+      // heuredefinTravail: heuredefinTravail.value,
     })
     .finally(() => {
       isloadingAdd.value = false;
@@ -696,8 +661,8 @@ const onSubmit = async () => {
       libelle.value = "";
       ville.value = "";
       quartier.value = "";
-      heuredebutTravail.value = "";
-      heuredefinTravail.value = "";
+      // heuredebutTravail.value = "";
+      // heuredefinTravail.value = "";
     })
     .catch((error) => {
       btnAjouter.value = "Enregistrer";
@@ -713,8 +678,8 @@ const onSubmitUpdated = async () => {
       libelle: libelleUpdated.value,
       ville: villeUpdated.value,
       quartier: quartierUpdated.value,
-      heuredebutTravail: heuredebutTravailUpdated.value,
-      heuredefinTravail: heuredefinTravailUpdated.value,
+      // heuredebutTravail: heuredebutTravailUpdated.value,
+      // heuredefinTravail: heuredefinTravailUpdated.value,
     })
     .finally(() => {
       isloadingUpdated.value = false;
@@ -728,8 +693,8 @@ const onSubmitUpdated = async () => {
       libelleUpdated.value = "";
       villeUpdated.value = "";
       quartierUpdated.value = "";
-      heuredebutTravailUpdated.value = "";
-      heuredefinTravailUpdated.value = "";
+      // heuredebutTravailUpdated.value = "";
+      // heuredefinTravailUpdated.value = "";
     })
     .catch((error) => {
       btnUpdated.value = "Enregistrer";

@@ -219,6 +219,59 @@ class StatistiquesService {
       agentMoinPointOnlyn,
     };
   }
+
+  public async getAllRapportToDay() {
+    const todate = format(new Date(), "dd/MM/yyyy", { locale: fr });
+
+    const itemAll = db
+      .select()
+      .from(pointages)
+      .where(eq(pointages.dateComplet, todate))
+      .leftJoin(users, eq(pointages.userId, users.id))
+      .all();
+
+    const pointagesItems = db
+      .select()
+      .from(pointages)
+      .where(eq(pointages.dateComplet, todate))
+      .all();
+
+    const totalPoints = this.calculerNombrePoints(itemAll);
+
+    const agentMoinsPoints = this.trouverAgentMoinsPoints(pointagesItems);
+
+    //console.log(totalPoints);
+    const usersAllOnly = totalPoints.tbusers.length;
+
+    const agentMaxPoints = this.trouverAgentPlusGrosPoints(pointagesItems);
+
+    const itemUser = await userService.getUserById(agentMaxPoints.userId!);
+    const itemUserMoin = await userService.getUserById(
+      agentMoinsPoints.userId!
+    );
+    //const itemUser = db.select().from(users).where(eq(users.id, agentMaxPoints.userId!)).get();
+
+    //console.log(itemUser?.id);
+
+    const agentMaxPointOnlyn = {
+      id: itemUser?.id,
+      nomComplet: itemUser?.nom + " " + itemUser?.prenom,
+      totalPointsSuccess: agentMaxPoints.pointSuccess,
+    };
+
+    const agentMoinPointOnlyn = {
+      id: itemUserMoin?.id,
+      nomComplet: itemUserMoin?.nom + " " + itemUserMoin?.prenom,
+      totalPointsDanger: agentMoinsPoints.pointDanger,
+    };
+
+    return {
+      totalUsers: usersAllOnly,
+      agentMaxPointOnlyn,
+      agentMoinPointOnlyn,
+    };
+  }
+
 }
 
 export default new StatistiquesService();

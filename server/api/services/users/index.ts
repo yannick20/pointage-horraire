@@ -24,6 +24,8 @@ class UserService {
       quartier: users.quartier,
       role: users.role,
       agencesId: users.agencesId,
+      heuredebutTravail: users.heuredebutTravail,
+      heureRetard: users.heureRetard,
       status: users.status,
     }).from(users).all();
     return usersAll;
@@ -75,6 +77,8 @@ class UserService {
       quartier: users.quartier,
       role: users.role,
       agencesId: users.agencesId,
+      heuredebutTravail: users.heuredebutTravail,
+      heureRetard: users.heureRetard,
       status: users.status,
     }).from(users).where(eq(users.agencesId, id)).all();
     return itemAll;

@@ -116,7 +116,6 @@
                       <th scope="col" class="px-4 py-3">Nom & Prenom</th>
                       <th scope="col" class="px-4 py-3">Fonction</th>
                       <th scope="col" class="px-4 py-3">Heure d'Arrive</th>
-                      <th scope="col" class="px-4 py-3">Heure de Depart</th>
                       <th scope="col" class="px-4 py-3">CUMULE POINT</th>
                       <th scope="col" class="px-4 py-3">Observation</th>
                       <th scope="col" class="px-4 py-3">Date</th>
@@ -128,12 +127,12 @@
                   </thead>
                   <tfoot>
                     <tr v-if="tbPointages.length === 0 && isloadingPointages == false">
-                      <td colspan="7" class="py-4 text-center">
+                      <td colspan="6" class="py-4 text-center">
                         Aucune donnée n'a été trouvé
                       </td>
                     </tr>
                     <tr v-if="isloadingPointages">
-                      <td colspan="7" class="py-4 text-center">
+                      <td colspan="6" class="py-4 text-center">
                         Chargement des données...
                       </td>
                     </tr>
@@ -155,9 +154,6 @@
                     </td>
                     <td class="px-4 py-3">
                         {{ item.pointages.heureArrive }}
-                    </td>
-                    <td class="px-4 py-3">
-                        {{ item.pointages.heureDepart }}
                     </td>
                     <td class="px-4 py-3">
                         <div
@@ -200,7 +196,7 @@
                     <td class="px-4 py-3">
                       <div
                       v-show="item.pointages.observation"
-                          :class="item.pointages.observation == 'Agent Nul' ? 'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0' : item.pointages.observation == 'Agent Moyen' ? 'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-yellow-100 text-yellow-800 md:mt-2 lg:mt-0' : 'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0'"
+                          :class="item.pointages.observation == 'Agent Nul' ? 'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-red-100 text-red-800 md:mt-2 lg:mt-0' : item.pointages.observation == 'Agent Moyen' ? 'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-yellow-100 text-yellow-800 md:mt-2 lg:mt-0' : item.pointages.observation == '' ? '' : 'inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0'"
                         >
                           
                         {{ item.pointages.observation }}

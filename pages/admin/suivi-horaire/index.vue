@@ -155,7 +155,7 @@
                     <td class="px-4 py-3">{{item.reportings.totalAgent}}</td>
                     <td class="px-4 py-3">{{item.reportings.recompense}} FCFA</td>
                     <td class="px-4 py-3">{{item.reportings.compteNbre}}</td>
-                    <td class="px-4 py-3">{{item.reportings.status == 1 ? 'En cours' : 'Termier'}} {{ item.reportings.status }} </td>
+                    <td class="px-4 py-3">{{item.reportings.status == 1 ? 'En cours' : 'Termier'}} </td>
                     <td class="flex items-center justify-center">
                       <button
                         @click="getOneSuivis(item)"
@@ -345,7 +345,6 @@
         </div>
       </Dialog>
     </TransitionRoot>
-
 
     <TransitionRoot appear :show="isOpenUpdate" as="template">
       <Dialog as="div" @close="onCloseUpdateModal" class="relative z-10">

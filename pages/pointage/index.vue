@@ -1,19 +1,20 @@
 <template>
   <div>
     <NuxtLayout name="adminpointage">
-      <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+      <div
+        class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden"
+      >
         <div class="text-center p-5">
-          <h1 style="font-size: xx-large; font-weight: bold;">
-          Fiche de presence du {{ dateOnly }}
-        </h1>
+          <h1 style="font-size: xx-large; font-weight: bold">
+            Fiche de presence du {{ dateOnly }}
+          </h1>
         </div>
-
       </div>
       <div class="mt-4 grid gap-6 md:grid-cols-4">
         <div
           class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
           v-for="(item, index) in tbHistoriques"
-                      :key="index"
+          :key="index"
         >
           <div class="flex justify-end px-4 pt-4">
             <!-- <button id="dropdownButton" data-dropdown-toggle="dropdown" class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
@@ -26,7 +27,7 @@
           </div>
           <div class="text-center mb-4">
             <span class="text-sm text-gray-500 dark:text-gray-400"
-              >Agence de {{ item.agences.libelle }}</span
+              >{{ item.agences.libelle }}</span
             >
           </div>
           <div class="flex flex-col items-center pb-10">
@@ -39,34 +40,41 @@
               {{ item.users.nom }} {{ item.users.prenom }}
             </h5>
             <span class="text-sm text-gray-500 dark:text-gray-400"
-              >{{ item.users.fonction}}
-              
-              </span
+              >{{ item.users.fonction }}
+            </span>
+            <p
+              class="text-gray-500"
+              :style="item.pointages.heureArrive !== '' ? '' : 'display : none'"
             >
-            <p class="text-gray-500" :style="item.pointages.heureArrive !== '' ? '' : 'display : none'">Heurre d'arrive :  {{ item.pointages.heureArrive}}</p>
-            
+              Heurre d'arrive : {{ item.pointages.heureArrive }}
+            </p>
+
             <div class="mt-5">
               <input
-              :style="item.pointages.heureArrive === '' ? '' : 'display : none'"
-                    type="time"
-                    name="heureArrive"
-                    id="heureArrive"
-                    v-model="heureArrive" 
-                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="ex: 0612345678"
-                    required
-                  />
+                :style="
+                  item.pointages.heureArrive === '' ? '' : 'display : none'
+                "
+                type="time"
+                name="heureArrive"
+                id="heureArrive"
+                v-model="heureArrive"
+                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="ex: 0612345678"
+                required
+              />
             </div>
-            
+
             <div class="flex mt-4 md:mt-6">
               <button
-              @click="onCheckHeure(item)"
-              :style="item.pointages.heureArrive === '' ? '' : 'display : none'"
-              
+                @click="onCheckHeure(item)"
+                :style="
+                  item.pointages.heureArrive === '' ? '' : 'display : none'
+                "
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >Arrive</button
               >
-              
+                Arrive
+              </button>
+
               <!-- <button
               :style="item.pointages.heureArrive !== '' ? '' : 'display : none'"
                 class="inline-flex items-center px-4 py-2 ml-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -83,8 +91,8 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { initFlowbite } from "flowbite";
-import { addMinutes,format, parse, isWithinInterval } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { addMinutes, format, parse, isWithinInterval } from "date-fns";
+import { fr } from "date-fns/locale";
 const { $toast, $axios } = useNuxtApp();
 // const nuxtApp = useNuxtApp() format(new Date(), 'dd/MM/yyyy', { locale: fr });
 const router = useRouter();
@@ -104,121 +112,128 @@ const agentMoinPointOnlyn = ref({});
 
 const isloader = ref(false);
 
-const onCheckHeure = async (item: any) =>{
-
+const onCheckHeure = async (item: any) => {
   if (heureArrive.value == "") {
     $toast.error("Saisissez un heure d'arriver");
   } else {
+    // Heure initiale
+    const heureInitiale = item.users.heuredebutTravail;
+
      // Heure initiale
-  const heureInitiale = item.agences.heuredebutTravail;
+     const heureRetard = parseInt(item.users.heureRetard);
 
-//Date
-const dateonly = format(new Date(), 'yyyy-MM-dd', { locale: fr })
+    //Date
+    const dateonly = format(new Date(), "yyyy-MM-dd", { locale: fr });
 
-// Conversion de l'heure initiale en objet Date
-const heureInitialeDate = new Date(`${dateonly}T${heureInitiale}:00`);
+    // Conversion de l'heure initiale en objet Date
+    const heureInitialeDate = new Date(`${dateonly}T${heureInitiale}:00`);
 
-// Ajout de 5 minutes
-const heureFinaleDate = addMinutes(heureInitialeDate, 5);
+    // Ajout de 5 minutes
+    const heureFinaleDate = addMinutes(heureInitialeDate, heureRetard);
 
-// Formatage de l'heure finale au format HH:mm
-const heureFinale = format(heureFinaleDate, 'HH:mm');
+    // Formatage de l'heure finale au format HH:mm
+    const heureFinale = format(heureFinaleDate, "HH:mm");
 
-// Heure à vérifier
-//const heureAVerifier = '03:28'; format(new Date(), 'HH:mm', { locale: fr });
-const heureAVerifier = heureArrive.value
+    // Heure à vérifier
+    //const heureAVerifier = '03:28'; format(new Date(), 'HH:mm', { locale: fr });
+    const heureAVerifier = heureArrive.value;
 
-// Convertir les chaînes d'heure en objets Date
-const heureDebutDate = parse(heureInitiale, 'HH:mm', new Date());
-const heureFinDate = parse(heureFinale, 'HH:mm', new Date());
-const heureAVerifierDate = parse(heureAVerifier, 'HH:mm', new Date());
+    // Convertir les chaînes d'heure en objets Date
+    const heureDebutDate = parse(heureInitiale, "HH:mm", new Date());
+    const heureFinDate = parse(heureFinale, "HH:mm", new Date());
+    const heureAVerifierDate = parse(heureAVerifier, "HH:mm", new Date());
 
-//console.log(`Heure heureArrive : ${heureArrive.value}`);
-// console.log(`Heure finale : ${heureFinale}`);
+    //console.log(`Heure heureArrive : ${heureArrive.value}`);
+    // console.log(`Heure finale : ${heureFinale}`);
 
-// console.log(`Heure actuel : ${format(new Date(), 'HH:mm', { locale: fr })}`);
+    // console.log(`Heure actuel : ${format(new Date(), 'HH:mm', { locale: fr })}`);
 
-// Vérifier si l'heure à vérifier est dans l'intervalle ,
-const estDansIntervalle = isWithinInterval(heureAVerifierDate, { start: heureDebutDate, end: heureFinDate });
+    // Vérifier si l'heure à vérifier est dans l'intervalle ,
+    const estDansIntervalle = isWithinInterval(heureAVerifierDate, {
+      start: heureDebutDate,
+      end: heureFinDate,
+    });
 
-if (estDansIntervalle) {
-    //console.log(`${heureAVerifier} est dans l'intervalle ${heureInitiale}-${heureFinale}.`);
-    const pointSuccess = item.pointages.pointSuccess + 2;
-    //console.log(`point gagne : ${pointSuccess}`);
-  //   console.log(heureAVerifier)
-  //  console.log(pointSuccess)
-  //  console.log(item.pointages.id)
-    await $axios
-      .put("/api/pointages/pointagesuccess", {
-        keyheureArrive: heureAVerifier,
-        keypointSuccess: pointSuccess,
-        keyid: item.pointages.id,
-    })
-      .finally(() => {
-        //isloading.value = false;
-      })
-      .then(({ data }) => {
-        //tbHistoriques.value = data;
-        $toast.success(data.message);
-        //console.log(data.message)
-        onGetPointagesOnly();
-      })
-      .catch((error) => {
-        //$toast.error(error.response.data.message);
-        console.log(error.response.data.message)
-      });
+    // console.log(`Heure Arrive : ${heureAVerifier}`);
+    // console.log(`Heure finale : ${heureInitiale}`);
+    // console.log(`heure Retard : ${heureRetard}`);
+    // console.log(`heure Finale : ${heureFinale}`);
+    // console.log(`estDansIntervalle : ${estDansIntervalle}`);
 
-} else {
-    //console.log(`${heureAVerifier} n'est pas dans l'intervalle ${heureInitiale}-${heureFinale}.`);
-    const pointSuccess = item.pointages.pointSuccess - 2;
-    const pointDanger = item.pointages.pointDanger + pointSuccess;
+    if (estDansIntervalle) {
+      //console.log(`${heureAVerifier} est dans l'intervalle ${heureInitiale}-${heureFinale}.`);
+      const pointSuccess = item.pointages.pointSuccess + 2;
+      //console.log(`point gagne : ${pointSuccess}`);
+      //   console.log(heureAVerifier)
+      //  console.log(pointSuccess)
+      //  console.log(item.pointages.id)
+      await $axios
+        .put("/api/pointages/pointagesuccess", {
+          keyheureArrive: heureAVerifier,
+          keypointSuccess: pointSuccess,
+          keyid: item.pointages.id,
+        })
+        .finally(() => {
+          //isloading.value = false;
+        })
+        .then(({ data }) => {
+          //tbHistoriques.value = data;
+          $toast.success(data.message);
+          //console.log(data.message)
+          onGetPointagesOnly();
+        })
+        .catch((error) => {
+          //$toast.error(error.response.data.message);
+          console.log(error.response.data.message);
+        });
+    } else {
+      //console.log(`${heureAVerifier} n'est pas dans l'intervalle ${heureInitiale}-${heureFinale}.`);
+      const pointSuccess = item.pointages.pointSuccess - 2;
+      const pointDanger = item.pointages.pointDanger + pointSuccess;
 
-  //   console.log(heureAVerifier)
-  //  console.log(pointDanger)
-  //  console.log(item.pointages.id)
-    //console.log(`point perdu : ${pointDanger}`);
-    await $axios
-      .put("/api/pointages/pointagedanger", {
-        keyheureArrive: heureAVerifier,
-        keypointDanger: pointDanger,
-        keyid: item.pointages.id,
-    })
-      .finally(() => {
-        //isloading.value = false;
-      })
-      .then(({ data }) => {
-        //tbHistoriques.value = data;
-        $toast.success(data.message);
-        //console.log(data.message)
-        onGetPointagesOnly();
-      })
-      .catch((error) => {
-        //$toast.error(error.response.data.message);
-        console.log(error.response.data.message)
-      });
-}
+      //   console.log(heureAVerifier)
+      //  console.log(pointDanger)
+      //  console.log(item.pointages.id)
+      //console.log(`point perdu : ${pointDanger}`);
+      await $axios
+        .put("/api/pointages/pointagedanger", {
+          keyheureArrive: heureAVerifier,
+          keypointDanger: pointDanger,
+          keyid: item.pointages.id,
+        })
+        .finally(() => {
+          //isloading.value = false;
+        })
+        .then(({ data }) => {
+          //tbHistoriques.value = data;
+          $toast.success(data.message);
+          //console.log(data.message)
+          onGetPointagesOnly();
+        })
+        .catch((error) => {
+          //$toast.error(error.response.data.message);
+          console.log(error.response.data.message);
+        });
+    }
   }
-
- 
-
-}
+};
 
 const onUpdatedPointSuccess = async () => {
   isloading.value = true;
-    await $axios
-      .put("/api/reportings/reportingsupdatedlast")
-      .finally(() => {
-        isloading.value = false;
-      })
-      .then(({ data }) => {
-        //tbHistoriques.value = data;
-        console.log(data.message)
-      })
-      .catch((error) => {
-        //$toast.error(error.response.data.message);
-        console.log(error.response.data.message)
-      });
-  };
+  await $axios
+    .put("/api/reportings/reportingsupdatedlast")
+    .finally(() => {
+      isloading.value = false;
+    })
+    .then(({ data }) => {
+      //tbHistoriques.value = data;
+      console.log(data.message);
+    })
+    .catch((error) => {
+      //$toast.error(error.response.data.message);
+      console.log(error.response.data.message);
+    });
+};
 
 const onGetPointagesOnly = async () => {
   isloading.value = true;
@@ -239,6 +254,6 @@ const onGetPointagesOnly = async () => {
 onMounted(() => {
   initFlowbite();
   onGetPointagesOnly();
-  dateOnly.value = format(new Date(), 'dd/MM/yyyy', { locale: fr })
+  dateOnly.value = format(new Date(), "dd/MM/yyyy", { locale: fr });
 });
 </script>
